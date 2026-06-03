@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from "react"
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
+import { CalculatorWidget } from "@/components/ui/calculator"
 import { cn } from "@/lib/utils"
+import { ArrowLeft } from "lucide-react"
 
 const STORAGE_KEY = "percentGameData_v3"
 const TARGET_SCORE = 150
@@ -460,12 +463,19 @@ export function PercentageGamePage() {
 
   return (
     <div className="mx-auto max-w-[860px]">
-      <h1 className="mb-4 font-heading text-2xl font-bold">
+      <Button variant="ghost" size="sm" asChild className="animate-fade-in-up stagger-1 mb-3">
+        <Link to="/math-game">
+          <ArrowLeft className="mr-1.5 size-4" />
+          Back to Math Games
+        </Link>
+      </Button>
+
+      <h1 className="animate-fade-in-up stagger-2 mb-4 font-heading text-2xl font-bold">
         Percent Change Practice
       </h1>
 
       {/* Status Bar */}
-      <div className="mb-4 flex flex-wrap items-center gap-2">
+      <div className="animate-fade-in-up stagger-3 mb-4 flex flex-wrap items-center gap-2">
         <div className="rounded-lg border border-border/60 bg-muted/30 px-3 py-1.5 text-sm font-semibold">
           Target: {TARGET_SCORE}
         </div>
@@ -478,7 +488,7 @@ export function PercentageGamePage() {
       </div>
 
       {/* Progress */}
-      <div className="mb-5 h-1.5 overflow-hidden rounded-full bg-muted">
+      <div className="animate-fade-in-up stagger-4 mb-5 h-1.5 overflow-hidden rounded-full bg-muted">
         <div
           className="h-full rounded-full bg-gradient-to-r from-primary to-blue-400 transition-all duration-500"
           style={{ width: `${pct}%` }}
@@ -486,7 +496,7 @@ export function PercentageGamePage() {
       </div>
 
       {/* Canvas Area */}
-      <div className="mb-5 flex flex-col items-center gap-4 rounded-xl border border-border/60 bg-muted/20 p-6">
+      <div className="animate-fade-in-up stagger-5 mb-5 flex flex-col items-center gap-4 rounded-xl border border-border/60 bg-muted/20 p-6">
         <canvas
           ref={canvasRef}
           className="max-w-full rounded-md"
@@ -528,7 +538,7 @@ export function PercentageGamePage() {
       </div>
 
       {/* Buttons */}
-      <div className="flex flex-wrap justify-center gap-3">
+      <div className="animate-fade-in-up flex flex-wrap justify-center gap-3" style={{ animationDelay: "400ms" }}>
         <Button onClick={() => setShowReport(true)}>📊 Report</Button>
         <Button variant="outline" onClick={handleReset}>
           ⚠️ Reset All Progress
@@ -583,6 +593,8 @@ export function PercentageGamePage() {
           </div>
         </div>
       )}
+
+      <CalculatorWidget />
     </div>
   )
 }

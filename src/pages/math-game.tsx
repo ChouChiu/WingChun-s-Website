@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { Gamepad2, Grid3X3, Percent } from "lucide-react"
+import { Grid3X3, Percent } from "lucide-react"
 
 const mathGames = [
   {
@@ -19,13 +19,14 @@ const mathGames = [
 export function MathGamePage() {
   return (
     <div className="mx-auto max-w-[860px]">
-      <h1 className="mb-6 font-heading text-2xl font-bold">Math Games</h1>
+      <h1 className="animate-fade-in-up stagger-1 mb-6 font-heading text-2xl font-bold">Math Games</h1>
       <div className="grid gap-4 sm:grid-cols-2">
-        {mathGames.map((game) => (
+        {mathGames.map((game, idx) => (
           <Link
             key={game.href}
             to={game.href}
-            className="group flex items-start gap-4 rounded-lg border border-border/60 bg-muted/30 p-5 transition-all duration-200 hover:border-border hover:bg-muted/50"
+            className="animate-fade-in-up group flex items-start gap-4 rounded-lg border border-border/60 bg-muted/30 p-5 transition-all duration-200 hover:border-border hover:bg-muted/50"
+            style={{ animationDelay: `${150 + idx * 80}ms` }}
           >
             <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
               <game.icon className="size-5" />

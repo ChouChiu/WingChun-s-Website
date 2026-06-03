@@ -118,12 +118,12 @@ export function HwListPage() {
   return (
     <div className="mx-auto max-w-[1060px]">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="animate-fade-in-up stagger-1 mb-6 flex items-center justify-between">
         <h1 className="font-heading text-2xl font-bold">作業列表</h1>
       </div>
 
       {/* Filters */}
-      <div className="mb-4 grid gap-3 sm:grid-cols-3">
+      <div className="animate-fade-in-up stagger-2 mb-4 grid gap-3 sm:grid-cols-3">
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-medium text-muted-foreground">
             發佈日期
@@ -170,7 +170,7 @@ export function HwListPage() {
       </div>
 
       {/* Reset */}
-      <div className="mb-5">
+      <div className="animate-fade-in-up stagger-3 mb-5">
         <Button variant="outline" size="sm" onClick={handleReset}>
           <RotateCcw className="mr-1.5 size-3.5" />
           重置篩選
@@ -178,13 +178,13 @@ export function HwListPage() {
       </div>
 
       {/* Stats */}
-      <div className="mb-5 grid gap-3 sm:grid-cols-2">
+      <div className="animate-fade-in-up stagger-4 mb-5 grid gap-3 sm:grid-cols-2">
         <StatCard icon={BookOpen} label="發佈功課" value={issuedCount} />
         <StatCard icon={Calendar} label="截止功課" value={dueCount} />
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-border/60">
+      <div className="animate-fade-in-up stagger-5 overflow-hidden rounded-xl border border-border/60">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -271,7 +271,7 @@ export function HwListPage() {
       </div>
 
       {/* Count */}
-      <div className="mt-3 text-right text-xs text-muted-foreground">
+      <div className="animate-fade-in-up stagger-5 mt-3 text-right text-xs text-muted-foreground">
         共 {filtered.length} 項作業
       </div>
     </div>

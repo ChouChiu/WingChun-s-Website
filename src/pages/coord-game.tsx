@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from "react"
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
+import { CalculatorWidget } from "@/components/ui/calculator"
 import { cn } from "@/lib/utils"
+import { ArrowLeft, Compass, Lightbulb, Rocket, Trophy } from "lucide-react"
 
 type Phase = "start" | "playing" | "transition" | "results"
 type Mode = "simple" | "challenge" | "hell" | "final"
@@ -611,6 +614,55 @@ function drawGraph(
     ctx.restore()
   }
 
+  interface LabelBox {
+    x: number
+    y: number
+    w: number
+    h: number
+  }
+
+  const labelBoxes: LabelBox[] = []
+
+  function overlapsAny(box: LabelBox): boolean {
+    for (const b of labelBoxes) {
+      if (
+        box.x < b.x + b.w &&
+        box.x + box.w > b.x &&
+        box.y < b.y + b.h &&
+        box.y + box.h > b.y
+      )
+        return true
+    }
+    return false
+  }
+
+  function findLabelPos(
+    px: number,
+    py: number,
+    w: number,
+    h: number
+  ): { x: number; y: number } {
+    const gap = 6
+    const candidates = [
+      { x: px + gap, y: py - h - gap },
+      { x: px - w - gap, y: py - h - gap },
+      { x: px + gap, y: py + gap },
+      { x: px - w - gap, y: py + gap },
+      { x: px - w / 2, y: py - h - gap * 2 },
+      { x: px - w / 2, y: py + gap * 2 },
+    ]
+    for (const c of candidates) {
+      const box = { x: c.x, y: c.y, w, h }
+      if (!overlapsAny(box)) {
+        labelBoxes.push(box)
+        return c
+      }
+    }
+    const fallback = { x: px + gap, y: py - h - gap }
+    labelBoxes.push({ x: fallback.x, y: fallback.y, w, h })
+    return fallback
+  }
+
   for (const pt of opts.points) {
     const [px, py] = toP(pt.x, pt.y)
     const color = pt.color || "#479ef5"
@@ -636,18 +688,27 @@ function drawGraph(
       ctx.save()
       ctx.fillStyle = color
       ctx.font = "bold 14px system-ui"
+      const metrics = ctx.measureText(pt.label)
+      const lw = metrics.width
+      const lh = 14
+      const pos = findLabelPos(px, py, lw, lh)
       ctx.textAlign = "left"
-      ctx.textBaseline = "bottom"
-      ctx.fillText(pt.label, px + 10, py - 8)
+      ctx.textBaseline = "top"
+      ctx.fillText(pt.label, pos.x, pos.y)
       ctx.restore()
     }
     if (pt.showCoords) {
       ctx.save()
       ctx.fillStyle = "rgba(255,255,255,0.8)"
       ctx.font = "12px system-ui"
+      const coordText = `(${pt.x}, ${pt.y})`
+      const metrics = ctx.measureText(coordText)
+      const cw = metrics.width
+      const ch = 12
+      const pos = findLabelPos(px, py, cw, ch)
       ctx.textAlign = "left"
       ctx.textBaseline = "top"
-      ctx.fillText(`(${pt.x}, ${pt.y})`, px + 10, py + 6)
+      ctx.fillText(coordText, pos.x, pos.y)
       ctx.restore()
     }
   }
@@ -795,6 +856,7 @@ export function CoordGamePage() {
 
       setQuestion(newQ)
       setModeQIdx(qIdx)
+      qIdxRef.current = qIdx
       setTimeLeft(cfg.time)
       setMaxTime(cfg.time)
 
@@ -968,17 +1030,24 @@ export function CoordGamePage() {
     <div className="mx-auto max-w-[860px]">
       {/* START */}
       {phase === "start" && (
-        <div className="flex flex-col items-center gap-5 py-10 text-center">
-          <div className="text-5xl">📐</div>
-          <h1 className="font-heading text-3xl font-bold">
+        <>
+          <Button variant="ghost" size="sm" asChild className="animate-fade-in-up stagger-1 mb-2">
+            <Link to="/math-game">
+              <ArrowLeft className="mr-1.5 size-4" />
+              Back to Math Games
+            </Link>
+          </Button>
+          <div className="flex flex-col items-center gap-5 py-10 text-center">
+          <div className="animate-fade-in-up stagger-2 text-5xl text-primary"><Compass className="size-12" /></div>
+          <h1 className="animate-fade-in-up stagger-3 font-heading text-3xl font-bold">
             Coordinate Challenge
           </h1>
-          <p className="max-w-[540px] text-sm leading-relaxed text-muted-foreground">
+          <p className="animate-fade-in-up stagger-4 max-w-[540px] text-sm leading-relaxed text-muted-foreground">
             Test your coordinate geometry skills across 4 progressive levels.
             Identify points, use reference clues, calculate areas, and master
             reflections &amp; translations!
           </p>
-          <div className="grid w-full max-w-[540px] grid-cols-2 gap-3">
+          <div className="animate-fade-in-up stagger-5 grid w-full max-w-[540px] grid-cols-2 gap-3">
             {(
               [
                 {
@@ -1014,8 +1083,9 @@ export function CoordGamePage() {
               </div>
             ))}
           </div>
-          <Button onClick={startGame}>Start Game</Button>
+          <Button className="animate-fade-in-up stagger-6" onClick={startGame}>Start Game</Button>
         </div>
+        </>
       )}
 
       {/* PLAYING */}
@@ -1033,7 +1103,7 @@ export function CoordGamePage() {
             {/* Tips */}
             <div className="hidden flex-col gap-3 rounded-xl border border-border/60 bg-muted/30 p-4 lg:flex lg:min-w-[200px] lg:max-w-[280px]">
               <div className="flex items-center gap-2 border-b border-border/60 pb-2">
-                <span className="text-lg">💡</span>
+                <span className="text-lg text-amber-400"><Lightbulb className="size-5" /></span>
                 <strong className="text-xs font-semibold uppercase tracking-wider">
                   Tips
                 </strong>
@@ -1221,16 +1291,16 @@ export function CoordGamePage() {
       {/* TRANSITION */}
       {phase === "transition" && (
         <div className="flex flex-col items-center gap-4 py-16 text-center">
-          <div className="text-5xl">🚀</div>
-          <h2 className="font-heading text-2xl font-bold">
+          <div className="animate-fade-in-up stagger-1 text-5xl text-primary"><Rocket className="size-12" /></div>
+          <h2 className="animate-fade-in-up stagger-2 font-heading text-2xl font-bold">
             {TRANSITION_MSG[modeRef.current]?.title || "Get Ready!"}
           </h2>
-          <p className="max-w-[400px] text-sm text-muted-foreground">
+          <p className="animate-fade-in-up stagger-3 max-w-[400px] text-sm text-muted-foreground">
             {TRANSITION_MSG[modeRef.current]?.sub ||
               "Next challenge incoming!"}
           </p>
-          <Button onClick={continueFromTransition}>Continue</Button>
-          <span className="text-xs text-muted-foreground">
+          <Button className="animate-fade-in-up stagger-4" onClick={continueFromTransition}>Continue</Button>
+          <span className="animate-fade-in-up stagger-5 text-xs text-muted-foreground">
             or press Enter / Space
           </span>
         </div>
@@ -1239,9 +1309,9 @@ export function CoordGamePage() {
       {/* RESULTS */}
       {phase === "results" && (
         <div className="flex flex-col items-center gap-4 py-10 text-center">
-          <div className="text-5xl">🏆</div>
-          <h2 className="font-heading text-2xl font-bold">Game Complete!</h2>
-          <div className="grid w-full max-w-[400px] grid-cols-2 gap-3">
+          <div className="animate-fade-in-up stagger-1 text-5xl text-primary"><Trophy className="size-12" /></div>
+          <h2 className="animate-fade-in-up stagger-2 font-heading text-2xl font-bold">Game Complete!</h2>
+          <div className="animate-fade-in-up stagger-3 grid w-full max-w-[400px] grid-cols-2 gap-3">
             <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
               <small className="text-xs text-muted-foreground">
                 Final Score
@@ -1285,7 +1355,7 @@ export function CoordGamePage() {
               </>
             )}
           </div>
-          <div className="flex gap-3">
+          <div className="animate-fade-in-up stagger-4 flex gap-3">
             <Button onClick={startGame}>Play Again</Button>
             <Button
               variant="outline"
@@ -1300,6 +1370,8 @@ export function CoordGamePage() {
           </div>
         </div>
       )}
+
+      <CalculatorWidget />
     </div>
   )
 }

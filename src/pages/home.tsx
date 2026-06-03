@@ -25,7 +25,7 @@ export function HomePage() {
   return (
     <div className="mx-auto max-w-[860px]">
       {/* Hero */}
-      <section className="mb-8">
+      <section className="animate-fade-in-up stagger-1 mb-8">
         <h1 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
           ChouChiu
         </h1>
@@ -36,7 +36,7 @@ export function HomePage() {
 
       {/* Info Cards */}
       <section className="mb-7 grid gap-3 sm:grid-cols-2">
-        <div className="flex items-start gap-3.5 rounded-lg border border-border/60 bg-muted/30 p-4 transition-colors hover:border-border">
+        <div className="animate-fade-in-up stagger-2 flex items-start gap-3.5 rounded-lg border border-border/60 bg-muted/30 p-4 transition-colors hover:border-border">
           <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary/15 text-primary">
             <Code className="size-4" />
           </div>
@@ -58,7 +58,7 @@ export function HomePage() {
             </span>
           </div>
         </div>
-        <div className="flex items-start gap-3.5 rounded-lg border border-border/60 bg-muted/30 p-4 transition-colors hover:border-border">
+        <div className="animate-fade-in-up stagger-3 flex items-start gap-3.5 rounded-lg border border-border/60 bg-muted/30 p-4 transition-colors hover:border-border">
           <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary/15 text-primary">
             <MessageCircle className="size-4" />
           </div>
@@ -74,7 +74,7 @@ export function HomePage() {
       </section>
 
       {/* Contact */}
-      <section className="mb-7">
+      <section className="animate-fade-in-up stagger-4 mb-7">
         <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
           Contact
         </h2>
@@ -103,7 +103,7 @@ export function HomePage() {
       </section>
 
       {/* Quick Links */}
-      <section className="mt-7">
+      <section className="animate-fade-in-up stagger-5 mt-7">
         <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
           Quick Links
         </h2>

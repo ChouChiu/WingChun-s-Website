@@ -12,13 +12,14 @@ export function BlogPage() {
 
   return (
     <div className="mx-auto max-w-[860px]">
-      <h1 className="mb-6 font-heading text-2xl font-bold">Blog</h1>
+      <h1 className="animate-fade-in-up stagger-1 mb-6 font-heading text-2xl font-bold">Blog</h1>
       <div className="flex flex-col gap-4">
-        {posts.map((post) => (
+        {posts.map((post, idx) => (
           <Link
             key={post.id}
             to={`/blog/${post.id}`}
-            className="group rounded-lg border border-border/60 bg-muted/30 p-5 transition-all duration-200 hover:border-border hover:bg-muted/50"
+            className="animate-fade-in-up group rounded-lg border border-border/60 bg-muted/30 p-5 transition-all duration-200 hover:border-border hover:bg-muted/50"
+            style={{ animationDelay: `${150 + idx * 80}ms` }}
           >
             <h2 className="text-lg font-semibold group-hover:text-primary">
               {post.title}

@@ -7,6 +7,7 @@ import {
   Menu,
   X,
 } from "lucide-react"
+import { useEffect, useRef } from "react"
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -39,6 +40,13 @@ const navLinks = [
 export function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    contentRef.current?.classList.remove("animate-page-fade-in")
+    void contentRef.current?.offsetWidth
+    contentRef.current?.classList.add("animate-page-fade-in")
+  }, [location.pathname])
 
   const isActive = (href: string) => {
     if (href === "/") return location.pathname === "/"
@@ -102,9 +110,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </Button>
       </header>
 
-      {/* Mobile nav */}
-      {mobileOpen && (
-        <nav className="mb-4 flex flex-col gap-1 rounded-xl border border-border/60 bg-card/80 p-3 backdrop-blur-xl md:hidden">
+        {/* Mobile nav */}
+        <nav
+          className={cn(
+            "mb-4 flex flex-col gap-1 overflow-hidden rounded-xl border border-border/60 bg-card/80 backdrop-blur-xl md:hidden",
+            mobileOpen
+              ? "animate-slide-down p-3"
+              : "hidden"
+          )}
+        >
           {navLinks.map((link) => (
             <Button
               key={link.href}
@@ -131,11 +145,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </a>
           </Button>
         </nav>
-      )}
 
       {/* Page content */}
       <main>
-        <div className="rounded-2xl border border-border/60 bg-card/50 p-6 shadow-sm sm:p-8">
+        <div
+          ref={contentRef}
+          className="animate-page-fade-in rounded-2xl border border-border/60 bg-card/50 p-6 shadow-sm sm:p-8"
+        >
           {children}
         </div>
       </main>

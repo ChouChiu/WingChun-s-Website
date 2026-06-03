@@ -47,7 +47,7 @@ export function BlogPostPage() {
 
   return (
     <div className="mx-auto max-w-[1200px]">
-      <Button variant="ghost" size="sm" asChild className="mb-4">
+      <Button variant="ghost" size="sm" asChild className="animate-fade-in-up stagger-1 mb-4">
         <Link to="/blog">
           <ArrowLeft className="mr-1.5 size-4" />
           Back to Blog
@@ -56,10 +56,10 @@ export function BlogPostPage() {
 
       <div className="flex gap-8">
         <article className="min-w-0 flex-1">
-          <h1 className="font-heading text-2xl font-bold sm:text-3xl">
+          <h1 className="animate-fade-in-up stagger-2 font-heading text-2xl font-bold sm:text-3xl">
             {post.title}
           </h1>
-          <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+          <div className="animate-fade-in-up stagger-3 mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
             <span className="flex items-center gap-1">
               <Calendar className="size-3.5" />
               {post.date}
@@ -74,13 +74,13 @@ export function BlogPostPage() {
             </span>
           </div>
 
-          <div className="markdown-body mt-6">
+          <div className="markdown-body animate-fade-in-up stagger-4 mt-6">
             <MarkdownRenderer content={post.content} />
           </div>
         </article>
 
         <aside className="hidden w-56 shrink-0 lg:block">
-          <div className="sticky top-24">
+          <div className="animate-fade-in-up stagger-4 sticky top-24">
             <TableOfContents content={post.content} />
           </div>
         </aside>
