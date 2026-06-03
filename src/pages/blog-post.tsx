@@ -1,11 +1,37 @@
+import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
-import { blogPosts } from "@/data/blog-posts"
+import { getPostById, type BlogPost } from "@/lib/blog"
+import { MarkdownRenderer } from "@/components/markdown-renderer"
+import { TableOfContents } from "@/components/table-of-contents"
 import { ArrowLeft, Calendar, Tag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function BlogPostPage() {
   const { id } = useParams()
-  const post = blogPosts.find((p) => p.id === id)
+  const [post, setPost] = useState<BlogPost | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!id) return
+    let cancelled = false
+    getPostById(id).then((p) => {
+      if (!cancelled) {
+        setPost(p ?? null)
+        setLoading(false)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [id])
+
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-[860px] text-center">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    )
+  }
 
   if (!post) {
     return (
@@ -19,7 +45,7 @@ export function BlogPostPage() {
   }
 
   return (
-    <div className="mx-auto max-w-[860px]">
+    <div className="mx-auto max-w-[1200px]">
       <Button variant="ghost" size="sm" asChild className="mb-4">
         <Link to="/blog">
           <ArrowLeft className="mr-1.5 size-4" />
@@ -27,88 +53,33 @@ export function BlogPostPage() {
         </Link>
       </Button>
 
-      <article>
-        <h1 className="font-heading text-2xl font-bold sm:text-3xl">
-          {post.title}
-        </h1>
-        <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Calendar className="size-3.5" />
-            {post.date}
-          </span>
-          <span className="flex items-center gap-1">
-            <Tag className="size-3.5" />
-            {post.tags.join(", ")}
-          </span>
-        </div>
+      <div className="flex gap-8">
+        <article className="min-w-0 flex-1">
+          <h1 className="font-heading text-2xl font-bold sm:text-3xl">
+            {post.title}
+          </h1>
+          <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <Calendar className="size-3.5" />
+              {post.date}
+            </span>
+            <span className="flex items-center gap-1">
+              <Tag className="size-3.5" />
+              {post.tags.join(", ")}
+            </span>
+          </div>
 
-        <div className="prose prose-sm dark:prose-invert mt-6 max-w-none">
-          {post.content.split("\n").map((line, i) => {
-            if (line.startsWith("# ")) {
-              return (
-                <h1
-                  key={i}
-                  className="mb-4 mt-8 font-heading text-2xl font-bold"
-                >
-                  {line.slice(2)}
-                </h1>
-              )
-            }
-            if (line.startsWith("## ")) {
-              return (
-                <h2
-                  key={i}
-                  className="mb-3 mt-6 font-heading text-xl font-semibold"
-                >
-                  {line.slice(3)}
-                </h2>
-              )
-            }
-            if (line.startsWith("```")) {
-              return null
-            }
-            if (line.startsWith("- ")) {
-              return (
-                <li key={i} className="ml-4 list-disc text-muted-foreground">
-                  {renderInline(line.slice(2))}
-                </li>
-              )
-            }
-            if (/^\d+\.\s/.test(line)) {
-              return (
-                <li
-                  key={i}
-                  className="ml-4 list-decimal text-muted-foreground"
-                >
-                  {renderInline(line.replace(/^\d+\.\s/, ""))}
-                </li>
-              )
-            }
-            if (line.trim() === "") {
-              return <br key={i} />
-            }
-            return (
-              <p key={i} className="mb-2 leading-relaxed text-foreground/90">
-                {renderInline(line)}
-              </p>
-            )
-          })}
-        </div>
-      </article>
+          <div className="markdown-body mt-6">
+            <MarkdownRenderer content={post.content} />
+          </div>
+        </article>
+
+        <aside className="hidden w-56 shrink-0 lg:block">
+          <div className="sticky top-24">
+            <TableOfContents content={post.content} />
+          </div>
+        </aside>
+      </div>
     </div>
   )
-}
-
-function renderInline(text: string) {
-  const parts = text.split(/(\*\*.*?\*\*)/g)
-  return parts.map((part, i) => {
-    if (part.startsWith("**") && part.endsWith("**")) {
-      return (
-        <strong key={i} className="font-semibold text-foreground">
-          {part.slice(2, -2)}
-        </strong>
-      )
-    }
-    return part
-  })
 }

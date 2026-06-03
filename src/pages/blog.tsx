@@ -1,13 +1,20 @@
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { blogPosts } from "@/data/blog-posts"
+import { getAllPosts, type BlogPost } from "@/lib/blog"
 import { Calendar, Tag } from "lucide-react"
 
 export function BlogPage() {
+  const [posts, setPosts] = useState<BlogPost[]>([])
+
+  useEffect(() => {
+    getAllPosts().then(setPosts)
+  }, [])
+
   return (
     <div className="mx-auto max-w-[860px]">
       <h1 className="mb-6 font-heading text-2xl font-bold">Blog</h1>
       <div className="flex flex-col gap-4">
-        {blogPosts.map((post) => (
+        {posts.map((post) => (
           <Link
             key={post.id}
             to={`/blog/${post.id}`}
