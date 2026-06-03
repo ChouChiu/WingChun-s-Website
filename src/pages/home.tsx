@@ -27,7 +27,7 @@ export function HomePage() {
       {/* Hero */}
       <section className="mb-8">
         <h1 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
-          WingChunWong
+          ChouChiu
         </h1>
         <p className="mt-1 text-muted-foreground">
           A student from Hong Kong
@@ -47,7 +47,7 @@ export function HomePage() {
             <span className="text-sm leading-relaxed">
               Building{" "}
               <a
-                href="https://github.com/WingChunWong"
+                href="https://github.com/ChouChiu"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary underline-offset-4 hover:underline"
@@ -110,7 +110,7 @@ export function HomePage() {
         <div className="grid gap-2 sm:grid-cols-3">
           <Button variant="secondary" asChild>
             <a
-              href="https://github.com/WingChunWong"
+              href="https://github.com/ChouChiu"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -122,7 +122,7 @@ export function HomePage() {
             <a href="/blog">Read My Blog</a>
           </Button>
           <Button variant="secondary" asChild>
-            <a href="/tools">Try My Tools</a>
+            <a href="/math-game">Try My Math Games</a>
           </Button>
         </div>
       </section>

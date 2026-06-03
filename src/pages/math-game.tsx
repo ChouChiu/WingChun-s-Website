@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom"
-import { Gamepad2, Grid3X3 } from "lucide-react"
+import { Gamepad2, Grid3X3, Percent } from "lucide-react"
 
 const mathGames = [
   {
     href: "/math-game/percentage-game",
     title: "Percentage Game",
     description: "Practice calculating percentages quickly",
-    icon: Gamepad2,
+    icon: Percent,
   },
   {
     href: "/math-game/coord-game",

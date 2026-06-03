@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom"
 import {
   Home,
   BookOpen,
-  Wrench,
+  Calculator,
   ClipboardList,
   Menu,
   X,
@@ -33,7 +33,7 @@ const navLinks = [
   { href: "/", label: "Home", icon: Home },
   { href: "/blog", label: "Blog", icon: BookOpen },
   { href: "/hw-list", label: "HW List", icon: ClipboardList },
-  { href: "/math-game", label: "Math Games", icon: Wrench },
+  { href: "/math-game", label: "Math Games", icon: Calculator },
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -81,7 +81,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="ml-auto">
             <Button variant="ghost" size="icon" asChild>
               <a
-                href="https://github.com/WingChunWong"
+                href="https://github.com/ChouChiu"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -122,7 +122,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           ))}
           <Button variant="ghost" size="sm" asChild className="justify-start">
             <a
-              href="https://github.com/WingChunWong"
+              href="https://github.com/ChouChiu"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -142,7 +142,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Footer */}
       <footer className="mt-8 pb-6 text-center text-sm text-muted-foreground">
-        &copy; {new Date().getFullYear()} WingChunWong. All rights reserved.
+        &copy; {new Date().getFullYear()} ChouChiu. All rights reserved.
       </footer>
     </div>
   )

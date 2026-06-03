@@ -43,7 +43,7 @@ export function extractHeadings(markdown: string): TocItem[] {
     headings.push({ id, text, level })
   }
 
-  const htmlHeadingRegex = /<h([1-6])[^>]*class="[^"]*toc-only[^"]*"[^>]*>(.*?)<\/h\1>/gi
+  const htmlHeadingRegex = /<h([1-6])[^>]*>(.*?)<\/h\1>/gi
   while ((match = htmlHeadingRegex.exec(markdown)) !== null) {
     const level = parseInt(match[1])
     const text = match[2].replace(/<[^>]*>/g, "").trim()
@@ -57,4 +57,33 @@ export function extractHeadings(markdown: string): TocItem[] {
   }
 
   return headings
+}
+
+export function countWords(content: string): number {
+  let text = content
+
+  const frontmatterMatch = text.match(/^---\r?\n([\s\S]*?)\r?\n---/)
+  if (frontmatterMatch) {
+    text = text.slice(frontmatterMatch[0].length)
+  }
+
+  const lines = text.split("\n")
+  const filteredLines = lines.filter((line) => {
+    return !/^#{1,6}\s/.test(line.trim())
+  })
+
+  text = filteredLines.join("\n")
+  text = text.replace(/```[\s\S]*?```/g, "")
+  text = text.replace(/`[^`]*`/g, "")
+  text = text.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+  text = text.replace(/!\[([^\]]*)\]\([^)]*\)/g, "")
+  text = text.replace(/<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>/gi, "")
+  text = text.replace(/<[^>]*>/g, "")
+  text = text.replace(/\*\*/g, "")
+  text = text.replace(/\*/g, "")
+  text = text.replace(/~~/g, "")
+  text = text.replace(/==/g, "")
+
+  const chars = text.replace(/\s/g, "")
+  return chars.length
 }

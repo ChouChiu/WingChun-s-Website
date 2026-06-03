@@ -3,7 +3,8 @@ import { useParams, Link } from "react-router-dom"
 import { getPostById, type BlogPost } from "@/lib/blog"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
 import { TableOfContents } from "@/components/table-of-contents"
-import { ArrowLeft, Calendar, Tag } from "lucide-react"
+import { countWords } from "@/lib/toc"
+import { ArrowLeft, Calendar, FileText, Tag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function BlogPostPage() {
@@ -66,6 +67,10 @@ export function BlogPostPage() {
             <span className="flex items-center gap-1">
               <Tag className="size-3.5" />
               {post.tags.join(", ")}
+            </span>
+            <span className="flex items-center gap-1">
+              <FileText className="size-3.5" />
+              {countWords(post.content)} 字
             </span>
           </div>
 
