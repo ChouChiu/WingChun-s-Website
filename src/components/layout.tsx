@@ -3,6 +3,7 @@ import {
   Home,
   BookOpen,
   Wrench,
+  ClipboardList,
   Menu,
   X,
 } from "lucide-react"
@@ -31,6 +32,7 @@ import { cn } from "@/lib/utils"
 const navLinks = [
   { href: "/", label: "Home", icon: Home },
   { href: "/blog", label: "Blog", icon: BookOpen },
+  { href: "/hw-list", label: "HW List", icon: ClipboardList },
   { href: "/math-game", label: "Math Games", icon: Wrench },
 ]
 

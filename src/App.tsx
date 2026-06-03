@@ -6,6 +6,7 @@ import { BlogPostPage } from "@/pages/blog-post"
 import { MathGamePage } from "@/pages/math-game"
 import { PercentageGamePage } from "@/pages/percentage-game"
 import { CoordGamePage } from "@/pages/coord-game"
+import { HwListPage } from "@/pages/hw-list"
 
 export function App() {
   return (
@@ -18,6 +19,7 @@ export function App() {
           <Route path="/math-game" element={<MathGamePage />} />
           <Route path="/math-game/percentage-game" element={<PercentageGamePage />} />
           <Route path="/math-game/coord-game" element={<CoordGamePage />} />
+          <Route path="/hw-list" element={<HwListPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>
