@@ -63,7 +63,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         )}
       >
         <Link to="/" className="mr-3 shrink-0 font-heading text-lg font-bold tracking-tight">
-          WingChun
+          ChouChiu
         </Link>
 
         {/* Desktop nav */}
