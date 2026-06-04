@@ -173,9 +173,16 @@ const markdownComponents: Components = {
   },
   div({ children, ...props }: React.HTMLAttributes<HTMLDivElement> & ExtraProps & Record<string, unknown>) {
     const cleanProps = stripNode(props)
-    const repo = cleanProps['data-github-contribution'] as string | undefined
-    if (repo) {
-      return <div className="my-4"><GitHubContributionCard repo={repo} /></div>
+    const repos = cleanProps['data-github-contribution'] as string | undefined
+    if (repos) {
+      const repoList = repos.split('|').map(r => r.trim()).filter(Boolean)
+      return (
+        <div className="flex flex-col gap-4">
+          {repoList.map(repo => (
+            <GitHubContributionCard key={repo} repo={repo} />
+          ))}
+        </div>
+      )
     }
     return <div {...cleanProps}>{children}</div>
   },
