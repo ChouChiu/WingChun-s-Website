@@ -2,6 +2,7 @@ export interface GitHubRepo {
   name: string
   full_name: string
   html_url: string
+  description: string | null
   stargazers_count: number
   owner: {
     login: string
@@ -30,6 +31,7 @@ export interface GitHubStats {
 export interface ContributionData {
   repo: string
   repoUrl: string
+  description: string | null
   stars: number
   owner: {
     login: string

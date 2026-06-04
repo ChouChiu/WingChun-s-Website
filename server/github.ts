@@ -102,6 +102,7 @@ export async function getContributionData(owner: string, repo: string, username:
   return {
     repo: repoInfo.full_name,
     repoUrl: repoInfo.html_url,
+    description: repoInfo.description,
     stars: repoInfo.stargazers_count,
     owner: {
       login: repoInfo.owner.login,

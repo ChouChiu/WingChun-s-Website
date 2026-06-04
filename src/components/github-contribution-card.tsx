@@ -70,6 +70,7 @@ export function GitHubContributionCard({ repo, className }: GitHubContributionCa
           <div className="flex-1 space-y-2">
             <div className="h-5 w-40 bg-muted rounded" />
             <div className="h-4 w-24 bg-muted rounded" />
+            <div className="h-3 w-56 bg-muted rounded" />
           </div>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3">
@@ -117,7 +118,7 @@ export function GitHubContributionCard({ repo, className }: GitHubContributionCa
       className
     )}>
       {/* Header */}
-      <div className="flex items-start gap-4">
+      <div className="flex items-center gap-4">
         <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary transition-colors group-hover:bg-primary/20">
           <GithubIcon className="size-5" />
         </div>
@@ -142,6 +143,11 @@ export function GitHubContributionCard({ repo, className }: GitHubContributionCa
               </span>
             )}
           </div>
+          {data.description && (
+            <p className="mt-1.5 text-xs text-muted-foreground/80 line-clamp-2 leading-relaxed">
+              {data.description}
+            </p>
+          )}
         </div>
       </div>
 

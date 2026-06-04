@@ -1,6 +1,7 @@
 export interface ContributionData {
   repo: string
   repoUrl: string
+  description: string | null
   stars: number
   owner: {
     login: string
