@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react"
 import { Calculator as CalcIcon, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Button } from "@/shared/components/ui/button"
+import { cn } from "@/shared/lib/utils"
 
 export function CalculatorWidget() {
   const [open, setOpen] = useState(false)

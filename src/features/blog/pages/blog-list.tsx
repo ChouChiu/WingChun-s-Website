@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { getAllPosts, type BlogPost } from "@/lib/blog"
+import { getAllPosts, type BlogPost } from "../lib/blog"
 import { Calendar, Tag } from "lucide-react"
 
 export function BlogPage() {

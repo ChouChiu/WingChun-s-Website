@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Star, GitPullRequest, CircleDot, Plus, Minus, GitCommit } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { fetchContributionData } from '@/lib/github'
-import type { ContributionData, GitHubContributionCardProps } from '@/types/github'
+import { cn } from '@/shared/lib/utils'
+import { fetchContributionData } from '../lib/github'
+import type { ContributionData, GitHubContributionCardProps } from '../types/github'
 
 function GithubIcon({ className }: { className?: string }) {
   return (

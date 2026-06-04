@@ -1,12 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { Layout } from "@/components/layout"
-import { HomePage } from "@/pages/home"
-import { BlogPage } from "@/pages/blog"
-import { BlogPostPage } from "@/pages/blog-post"
-import { MathGamePage } from "@/pages/math-game"
-import { PercentageGamePage } from "@/pages/percentage-game"
-import { CoordGamePage } from "@/pages/coord-game"
-import { HwListPage } from "@/pages/hw-list"
+import { Layout } from "@/shared/components/layout/layout"
+import { HomePage } from "@/features/home/index"
+import { BlogPage, BlogPostPage } from "@/features/blog/index"
+import { MathGamePage, PercentageGamePage, CoordGamePage } from "@/features/math-games/index"
+import { HwListPage } from "@/features/hw-list/index"
 
 export function App() {
   return (

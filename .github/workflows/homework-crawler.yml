@@ -8,7 +8,7 @@ on:
       force_full_update:
         description: 'Force full update (re-fetch all data)'
         required: false
-        default: 'false'
+        default: false
         type: boolean
 
 permissions:

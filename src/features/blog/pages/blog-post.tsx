@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
-import { getPostById, type BlogPost } from "@/lib/blog"
-import { MarkdownRenderer } from "@/components/markdown-renderer"
-import { TableOfContents } from "@/components/table-of-contents"
-import { countWords } from "@/lib/toc"
+import { getPostById, type BlogPost } from "../lib/blog"
+import { MarkdownRenderer } from "../components/markdown-renderer"
+import { TableOfContents } from "../components/table-of-contents"
+import { countWords } from "../lib/toc"
 import { ArrowLeft, Calendar, FileText, Tag } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/components/ui/button"
 
 export function BlogPostPage() {
   const { id } = useParams()

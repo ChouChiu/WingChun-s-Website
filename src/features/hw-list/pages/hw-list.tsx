@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react"
-import { loadHomeworkData, type HwItem } from "@/data/homework"
+import { loadHomeworkData, type HwItem } from "../data/homework"
 import {
   extractSubjects,
   filterHomework,
@@ -8,8 +8,8 @@ import {
   countDueBy,
   getTodayYMD,
   type HwStatus,
-} from "@/lib/homework"
-import { Button } from "@/components/ui/button"
+} from "../lib/homework"
+import { Button } from "@/shared/components/ui/button"
 import {
   AlertCircle,
   ArrowRight,
@@ -20,7 +20,7 @@ import {
   Loader2,
   RotateCcw,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/shared/lib/utils"
 
 function StatusBadge({ status }: { status: ReturnType<typeof getHomeworkStatus> }) {
   return (

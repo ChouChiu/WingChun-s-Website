@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { extractHeadings, type TocItem } from "@/lib/toc"
+import { extractHeadings, type TocItem } from "../lib/toc"
 import { List } from "lucide-react"
 
 interface TableOfContentsProps {

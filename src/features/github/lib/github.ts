@@ -1,4 +1,4 @@
-import type { ContributionData } from '@/types/github'
+import type { ContributionData } from '../types/github'
 
 const API_BASE = '/api/github'
 const CACHE_KEY_PREFIX = 'github-contribution-'

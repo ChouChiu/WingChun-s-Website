@@ -17,7 +17,7 @@ interface FrontMatter {
   tags?: string[]
 }
 
-const rawFiles = import.meta.glob("../contents/blogs/*.md", {
+const rawFiles = import.meta.glob("../../../contents/blogs/*.md", {
   query: "?raw",
   import: "default",
 })

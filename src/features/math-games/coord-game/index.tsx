@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Link } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { CalculatorWidget } from "@/components/ui/calculator"
-import { cn } from "@/lib/utils"
+import { Button } from "@/shared/components/ui/button"
+import { CalculatorWidget } from "../components/calculator"
+import { cn } from "@/shared/lib/utils"
 import { ArrowLeft, Compass, Lightbulb, Rocket, Trophy } from "lucide-react"
 
 type Phase = "start" | "playing" | "transition" | "results"
@@ -816,8 +816,10 @@ export function CoordGamePage() {
     []
   )
 
+  const loadNextQuestionRef = useRef<(mode: Mode, qIdx: number) => void>(() => {})
+
   const loadNextQuestion = useCallback(
-    (mode: Mode, qIdx: number, _s: number, _c: number, _w: number) => {
+    (mode: Mode, qIdx: number) => {
       const cfg = MODE_CFG[mode]
       if (qIdx >= cfg.questions) {
         const mi = MODES.indexOf(mode)
@@ -830,9 +832,8 @@ export function CoordGamePage() {
         } else {
           stopCountdown()
           stopFinalClock()
-          let finalSec = 0
           if (finalStartRef.current > 0) {
-            finalSec = Math.round(
+            const finalSec = Math.round(
               (Date.now() - finalStartRef.current) / 1000
             )
             const bonus = Math.max(0, 300 - finalSec)
@@ -881,12 +882,9 @@ export function CoordGamePage() {
               setWrongCount(wrongRef.current)
               setTimeout(
                 () =>
-                  loadNextQuestion(
+                  loadNextQuestionRef.current(
                     modeRef.current,
-                    qIdxRef.current + 1,
-                    scoreRef.current,
-                    correctRef.current,
-                    wrongRef.current
+                    qIdxRef.current + 1
                   ),
                 1400
               )
@@ -906,6 +904,10 @@ export function CoordGamePage() {
     [setupCanvas, renderQ, stopCountdown, stopFinalClock]
   )
 
+  useEffect(() => {
+    loadNextQuestionRef.current = loadNextQuestion
+  }, [loadNextQuestion])
+
   const startGame = useCallback(() => {
     scoreRef.current = 0
     correctRef.current = 0
@@ -920,7 +922,7 @@ export function CoordGamePage() {
     setModeQIdx(0)
     setFinalElapsed(0)
     setPhase("playing")
-    loadNextQuestion("simple", 0, 0, 0, 0)
+    loadNextQuestion("simple", 0)
   }, [loadNextQuestion])
 
   const pickAnswer = useCallback(
@@ -947,10 +949,7 @@ export function CoordGamePage() {
         () =>
           loadNextQuestion(
             modeRef.current,
-            qIdxRef.current + 1,
-            scoreRef.current,
-            correctRef.current,
-            wrongRef.current
+            qIdxRef.current + 1
           ),
         1400
       )
@@ -962,10 +961,7 @@ export function CoordGamePage() {
     setPhase("playing")
     loadNextQuestion(
       modeRef.current,
-      0,
-      scoreRef.current,
-      correctRef.current,
-      wrongRef.current
+      0
     )
   }, [loadNextQuestion])
 
@@ -1293,10 +1289,10 @@ export function CoordGamePage() {
         <div className="flex flex-col items-center gap-4 py-16 text-center">
           <div className="animate-fade-in-up stagger-1 text-5xl text-primary"><Rocket className="size-12" /></div>
           <h2 className="animate-fade-in-up stagger-2 font-heading text-2xl font-bold">
-            {TRANSITION_MSG[modeRef.current]?.title || "Get Ready!"}
+            {TRANSITION_MSG[currentMode]?.title || "Get Ready!"}
           </h2>
           <p className="animate-fade-in-up stagger-3 max-w-[400px] text-sm text-muted-foreground">
-            {TRANSITION_MSG[modeRef.current]?.sub ||
+            {TRANSITION_MSG[currentMode]?.sub ||
               "Next challenge incoming!"}
           </p>
           <Button className="animate-fade-in-up stagger-4" onClick={continueFromTransition}>Continue</Button>

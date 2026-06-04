@@ -1,4 +1,4 @@
-import type { HwItem } from "@/data/homework"
+import type { HwItem } from "../data/homework"
 
 export type HwStatus = "overdue" | "today" | "future"
 

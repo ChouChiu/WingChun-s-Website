@@ -27,8 +27,8 @@ function GithubIcon({ className }: { className?: string }) {
   )
 }
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Button } from "../ui/button"
+import { cn } from "../../lib/utils"
 
 const navLinks = [
   { href: "/", label: "主頁", icon: Home },
@@ -77,7 +77,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               className={cn(
                 "relative",
                 isActive(link.href) &&
-                  "after:absolute after:bottom-0 after:left-1/2 after:h-[3px] after:w-4 after:-translate-x-1/2 after:rounded-full after:bg-primary"
+                  "after:absolute after:-bottom-3 after:left-1/2 after:h-[3px] after:w-4 after:-translate-x-1/2 after:rounded-full after:bg-primary"
               )}
             >
               <Link to={link.href}>

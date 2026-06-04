@@ -11,14 +11,15 @@ import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism"
 import { Icon } from "@iconify/react"
 import { Check, Copy } from "lucide-react"
 import type { Components, ExtraProps } from "react-markdown"
-import { slugify } from "@/lib/toc"
+import { slugify } from "../lib/toc"
 
-import { GitHubContributionCard } from "./github-contribution-card"
+import { GitHubContributionCard } from "@/features/github/components/contribution-card"
 
 import "katex/dist/katex.min.css"
 
 function stripNode<T extends Record<string, unknown>>(props: T): Omit<T, "node"> {
-  const { node: _node, ...rest } = props
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { node, ...rest } = props
   return rest as Omit<T, "node">
 }
 

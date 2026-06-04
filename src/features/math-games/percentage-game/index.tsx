@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Link } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { CalculatorWidget } from "@/components/ui/calculator"
-import { cn } from "@/lib/utils"
+import { Button } from "@/shared/components/ui/button"
+import { CalculatorWidget } from "../components/calculator"
+import { cn } from "@/shared/lib/utils"
 import { ArrowLeft } from "lucide-react"
 
 const STORAGE_KEY = "percentGameData_v3"
