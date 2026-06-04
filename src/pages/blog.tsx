@@ -12,7 +12,7 @@ export function BlogPage() {
 
   return (
     <div className="mx-auto max-w-[860px]">
-      <h1 className="animate-fade-in-up stagger-1 mb-6 font-heading text-2xl font-bold">Blog</h1>
+      <h1 className="animate-fade-in-up stagger-1 mb-6 font-heading text-2xl font-bold">網誌</h1>
       <div className="flex flex-col gap-4">
         {posts.map((post, idx) => (
           <Link

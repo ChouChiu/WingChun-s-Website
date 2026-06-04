@@ -31,10 +31,10 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 const navLinks = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/blog", label: "Blog", icon: BookOpen },
-  { href: "/hw-list", label: "HW List", icon: ClipboardList },
-  { href: "/math-game", label: "Math Games", icon: Calculator },
+  { href: "/", label: "主頁", icon: Home },
+  { href: "/blog", label: "網誌", icon: BookOpen },
+  { href: "/hw-list", label: "功課列表", icon: ClipboardList },
+  { href: "/math-game", label: "數學遊戲", icon: Calculator },
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -158,7 +158,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Footer */}
       <footer className="mt-8 pb-6 text-center text-sm text-muted-foreground">
-        &copy; {new Date().getFullYear()} ChouChiu. All rights reserved.
+        &copy; {new Date().getFullYear()} ChouChiu. 版權所有。
       </footer>
     </div>
   )

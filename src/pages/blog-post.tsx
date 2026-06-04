@@ -29,7 +29,7 @@ export function BlogPostPage() {
   if (loading) {
     return (
       <div className="mx-auto max-w-[860px] text-center">
-        <p className="text-muted-foreground">Loading...</p>
+        <p className="text-muted-foreground">載入中...</p>
       </div>
     )
   }
@@ -37,9 +37,9 @@ export function BlogPostPage() {
   if (!post) {
     return (
       <div className="mx-auto max-w-[860px] text-center">
-        <h1 className="mb-4 text-2xl font-bold">Post Not Found</h1>
+        <h1 className="mb-4 text-2xl font-bold">找不到文章</h1>
         <Button asChild>
-          <Link to="/blog">Back to Blog</Link>
+          <Link to="/blog">返回網誌</Link>
         </Button>
       </div>
     )
@@ -50,7 +50,7 @@ export function BlogPostPage() {
       <Button variant="ghost" size="sm" asChild className="animate-fade-in-up stagger-1 mb-4">
         <Link to="/blog">
           <ArrowLeft className="mr-1.5 size-4" />
-          Back to Blog
+          返回網誌
         </Link>
       </Button>
 

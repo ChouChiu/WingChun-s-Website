@@ -30,7 +30,7 @@ export function HomePage() {
           ChouChiu
         </h1>
         <p className="mt-1 text-muted-foreground">
-          A student from Hong Kong
+          來自香港的學生
         </p>
       </section>
 
@@ -42,19 +42,19 @@ export function HomePage() {
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-xs font-semibold text-muted-foreground">
-              Current Projects
+              現時項目
             </span>
             <span className="text-sm leading-relaxed">
-              Building{" "}
+              正在建構{" "}
               <a
                 href="https://github.com/ChouChiu"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary underline-offset-4 hover:underline"
               >
-                My Website
+                我的網站
               </a>{" "}
-              and other open-source projects
+              及其他開源項目
             </span>
           </div>
         </div>
@@ -64,10 +64,10 @@ export function HomePage() {
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-xs font-semibold text-muted-foreground">
-              Interests
+              興趣
             </span>
             <span className="text-sm leading-relaxed">
-              Vibe Coding &amp; Play Games
+              Vibe Coding &amp; 打機
             </span>
           </div>
         </div>
@@ -76,7 +76,7 @@ export function HomePage() {
       {/* Contact */}
       <section className="animate-fade-in-up stagger-4 mb-7">
         <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
-          Contact
+          聯絡方式
         </h2>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" asChild>
@@ -97,7 +97,7 @@ export function HomePage() {
           </Button>
           <Button variant="outline" size="sm" onClick={copyQQ}>
             <Copy className="mr-1.5 size-4" />
-            {copied ? "Copied!" : "QQ: 2750821684"}
+            {copied ? "已複製！" : "QQ: 2750821684"}
           </Button>
         </div>
       </section>
@@ -105,7 +105,7 @@ export function HomePage() {
       {/* Quick Links */}
       <section className="animate-fade-in-up stagger-5 mt-7">
         <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
-          Quick Links
+          快速連結
         </h2>
         <div className="grid gap-2 sm:grid-cols-3">
           <Button variant="secondary" asChild>
@@ -115,14 +115,14 @@ export function HomePage() {
               rel="noopener noreferrer"
             >
               <ExternalLink className="mr-1.5 size-4" />
-              GitHub Profile
+              GitHub 個人資料
             </a>
           </Button>
           <Button variant="secondary" asChild>
-            <a href="/blog">Read My Blog</a>
+            <a href="/blog">閱讀我的網誌</a>
           </Button>
           <Button variant="secondary" asChild>
-            <a href="/math-game">Try My Math Games</a>
+            <a href="/math-game">試試我的數學遊戲</a>
           </Button>
         </div>
       </section>
