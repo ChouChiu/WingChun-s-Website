@@ -13,6 +13,10 @@ export interface ContributionData {
     deletions: number
     lastContributionDate: string | null
   }
+  links: {
+    issues: string
+    pullRequests: string
+  }
 }
 
 export interface GitHubContributionCardProps {

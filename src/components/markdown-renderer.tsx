@@ -171,8 +171,13 @@ const markdownComponents: Components = {
       />
     )
   },
-  'github-contribution'({ repo }: { repo?: string }) {
-    return <GitHubContributionCard repo={repo || 'predidit/kazumi'} />
+  div({ children, ...props }: React.HTMLAttributes<HTMLDivElement> & ExtraProps & Record<string, unknown>) {
+    const cleanProps = stripNode(props)
+    const repo = cleanProps['data-github-contribution'] as string | undefined
+    if (repo) {
+      return <div className="my-4"><GitHubContributionCard repo={repo} /></div>
+    }
+    return <div {...cleanProps}>{children}</div>
   },
 } as Components
 

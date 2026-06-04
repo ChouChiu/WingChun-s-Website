@@ -40,29 +40,64 @@ export async function getContributorStats(owner: string, repo: string, username:
   }
 }
 
-export async function getContributionData(owner: string, repo: string, username: string): Promise<ContributionData> {
-  const [repoInfo] = await Promise.all([
-    getRepoInfo(owner, repo),
-    getContributors(owner, repo)
-  ])
+interface SearchResult {
+  total_count: number
+  items: Array<{
+    number: number
+    created_at: string
+  }>
+}
 
-  const stats = await getContributorStats(owner, repo, username)
+interface PullRequestDetail {
+  additions: number
+  deletions: number
+  merged_at: string | null
+}
 
+async function searchIssues(owner: string, repo: string, username: string, type: 'issue' | 'pr'): Promise<SearchResult> {
+  try {
+    const query = `repo:${owner}/${repo}+author:${username}+type:${type}`
+    return await fetchGitHub<SearchResult>(`/search/issues?q=${query}`)
+  } catch {
+    return { total_count: 0, items: [] }
+  }
+}
+
+async function getPullRequestStats(owner: string, repo: string, prNumbers: number[]): Promise<{ additions: number, deletions: number, lastMergedDate: string | null }> {
   let additions = 0
   let deletions = 0
-  let lastContributionDate: string | null = null
+  let lastMergedDate: string | null = null
 
-  if (stats && stats.weeks.length > 0) {
-    const totalWeeks = stats.weeks
-    additions = totalWeeks.reduce((sum, week) => sum + week.a, 0)
-    deletions = totalWeeks.reduce((sum, week) => sum + week.d, 0)
-
-    const lastWeek = totalWeeks[totalWeeks.length - 1]
-    if (lastWeek) {
-      const date = new Date(parseInt(lastWeek.w) * 1000)
-      lastContributionDate = date.toISOString().split('T')[0]
+  for (const prNumber of prNumbers.slice(0, 10)) {
+    try {
+      const pr = await fetchGitHub<PullRequestDetail>(`/repos/${owner}/${repo}/pulls/${prNumber}`)
+      additions += pr.additions
+      deletions += pr.deletions
+      if (pr.merged_at) {
+        const mergedDate = pr.merged_at.split('T')[0]
+        if (!lastMergedDate || mergedDate > lastMergedDate) {
+          lastMergedDate = mergedDate
+        }
+      }
+    } catch {
+      continue
     }
   }
+
+  return { additions, deletions, lastMergedDate }
+}
+
+export async function getContributionData(owner: string, repo: string, username: string): Promise<ContributionData> {
+  const [repoInfo, issuesResult, prsResult] = await Promise.all([
+    getRepoInfo(owner, repo),
+    searchIssues(owner, repo, username, 'issue'),
+    searchIssues(owner, repo, username, 'pr')
+  ])
+
+  const prNumbers = prsResult.items.map(pr => pr.number)
+  const prStats = await getPullRequestStats(owner, repo, prNumbers)
+
+  const encodedUsername = encodeURIComponent(username)
 
   return {
     repo: repoInfo.full_name,
@@ -73,11 +108,15 @@ export async function getContributionData(owner: string, repo: string, username:
       avatarUrl: repoInfo.owner.avatar_url
     },
     contributions: {
-      issues: 0,
-      pullRequests: 0,
-      additions,
-      deletions,
-      lastContributionDate
+      issues: issuesResult.total_count,
+      pullRequests: prsResult.total_count,
+      additions: prStats.additions,
+      deletions: prStats.deletions,
+      lastContributionDate: prStats.lastMergedDate
+    },
+    links: {
+      issues: `https://github.com/${owner}/${repo}/issues?q=is%3Aissue+author%3A${encodedUsername}`,
+      pullRequests: `https://github.com/${owner}/${repo}/pulls?q=is%3Apr+author%3A${encodedUsername}`
     }
   }
 }
