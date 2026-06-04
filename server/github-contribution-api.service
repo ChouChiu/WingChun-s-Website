@@ -1,0 +1,17 @@
+[Unit]
+Description=GitHub Contribution API Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/github-contribution-api
+ExecStart=/usr/bin/node --loader tsx index.ts
+Restart=on-failure
+RestartSec=10
+Environment=NODE_ENV=production
+Environment=PORT=3001
+Environment=GITHUB_TOKEN=your_github_token_here
+
+[Install]
+WantedBy=multi-user.target

@@ -13,6 +13,8 @@ import { Check, Copy } from "lucide-react"
 import type { Components, ExtraProps } from "react-markdown"
 import { slugify } from "@/lib/toc"
 
+import { GitHubContributionCard } from "./github-contribution-card"
+
 import "katex/dist/katex.min.css"
 
 function stripNode<T extends Record<string, unknown>>(props: T): Omit<T, "node"> {
@@ -169,7 +171,10 @@ const markdownComponents: Components = {
       />
     )
   },
-}
+  'github-contribution'({ repo }: { repo?: string }) {
+    return <GitHubContributionCard repo={repo || 'predidit/kazumi'} />
+  },
+} as Components
 
 interface MarkdownRendererProps {
   content: string
