@@ -1,8 +1,8 @@
-import { readdir, readFile, writeFile, access } from "node:fs/promises"
-import { resolve, join, dirname } from "node:path"
+import { access, readdir, readFile, writeFile } from "node:fs/promises"
+import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
-import { parse } from "yaml"
 import * as p from "@clack/prompts"
+import { parse } from "yaml"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const BLOGS_DIR = resolve(__dirname, "../src/contents/blogs")
@@ -40,6 +40,28 @@ async function getAllTags(): Promise<string[]> {
   return [...tagSet].sort()
 }
 
+async function getAllCags(): Promise<string[]> {
+  const files = await readdir(BLOGS_DIR)
+  const cagSet = new Set<string>()
+
+  for (const file of files) {
+    if (!file.endsWith(".md")) continue
+    const raw = await readFile(join(BLOGS_DIR, file), "utf-8")
+    const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/)
+    if (!match) continue
+    try {
+      const data = parse(match[1]) as { cag?: string }
+      if (data.cag) {
+        cagSet.add(data.cag)
+      }
+    } catch {
+      // skip files with invalid YAML
+    }
+  }
+
+  return [...cagSet].sort()
+}
+
 async function fileExists(path: string): Promise<boolean> {
   try {
     await access(path)
@@ -53,6 +75,7 @@ async function main() {
   p.intro("Create a new blog post")
 
   const existingTags = await getAllTags()
+  const existingCags = await getAllCags()
 
   const title = await p.text({
     message: "Post title",
@@ -92,6 +115,42 @@ async function main() {
     process.exit(0)
   }
 
+  const cag = await (async (): Promise<string> => {
+    if (existingCags.length > 0) {
+      const cagChoices = [
+        ...existingCags.map((c) => ({ value: c, label: c })),
+        { value: "__new__", label: "New category..." },
+      ]
+
+      const selected = await p.select({
+        message: "Category",
+        options: cagChoices,
+      })
+
+      if (p.isCancel(selected)) {
+        p.cancel("Operation cancelled.")
+        process.exit(0)
+      }
+
+      if (selected !== "__new__") return selected as string
+    }
+
+    const newCag = await p.text({
+      message: "Category",
+      placeholder: "e.g. 技術, 作文, 公告",
+      validate: (value) => {
+        if (!value || value.trim().length === 0) return "Category is required"
+      },
+    })
+
+    if (p.isCancel(newCag)) {
+      p.cancel("Operation cancelled.")
+      process.exit(0)
+    }
+
+    return (newCag as string).trim()
+  })()
+
   let selectedTags: string[] = []
   const newTags: string[] = []
 
@@ -130,7 +189,7 @@ async function main() {
       ...newTagInput
         .split(",")
         .map((t) => t.trim())
-        .filter(Boolean),
+        .filter(Boolean)
     )
   }
 
@@ -169,6 +228,7 @@ async function main() {
     `title: "${title}"`,
     `date: "${date}"`,
     `summary: "${summary}"`,
+    `cag: "${cag}"`,
     `tags: [${allTags.join(", ")}]`,
     "---",
   ].join("\n")

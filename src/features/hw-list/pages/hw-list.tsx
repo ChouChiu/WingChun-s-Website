@@ -1,15 +1,3 @@
-import { useState, useMemo, useEffect } from "react"
-import { loadHomeworkData, type HwItem } from "../data/homework"
-import {
-  extractSubjects,
-  filterHomework,
-  getHomeworkStatus,
-  countIssuedBy,
-  countDueBy,
-  getTodayYMD,
-  type HwStatus,
-} from "../lib/homework"
-import { Button } from "@/shared/components/ui/button"
 import {
   AlertCircle,
   ArrowRight,
@@ -20,19 +8,35 @@ import {
   Loader2,
   RotateCcw,
 } from "lucide-react"
+import { useEffect, useMemo, useState } from "react"
+import { Button } from "@/shared/components/ui/button"
 import { cn } from "@/shared/lib/utils"
+import { type HwItem, loadHomeworkData } from "../data/homework"
+import {
+  countDueBy,
+  countIssuedBy,
+  extractSubjects,
+  filterHomework,
+  getHomeworkStatus,
+  getTodayYMD,
+  type HwStatus,
+} from "../lib/homework"
 
-function StatusBadge({ status }: { status: ReturnType<typeof getHomeworkStatus> }) {
+function StatusBadge({
+  status,
+}: {
+  status: ReturnType<typeof getHomeworkStatus>
+}) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold whitespace-nowrap",
+        "inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1 font-semibold text-xs",
         status.cls === "overdue" &&
-          "bg-destructive/10 text-destructive border border-destructive/20",
+          "border border-destructive/20 bg-destructive/10 text-destructive",
         status.cls === "today" &&
-          "bg-primary/10 text-primary border border-primary/20",
+          "border border-primary/20 bg-primary/10 text-primary",
         status.cls === "future" &&
-          "bg-muted text-muted-foreground border border-border/60"
+          "border border-border/60 bg-muted text-muted-foreground"
       )}
     >
       {status.cls === "overdue" && <AlertCircle className="size-3" />}
@@ -58,8 +62,8 @@ function StatCard({
         <Icon className="size-5" />
       </div>
       <div>
-        <div className="text-xs font-medium text-muted-foreground">{label}</div>
-        <div className="text-xl font-bold">{value}</div>
+        <div className="font-medium text-muted-foreground text-xs">{label}</div>
+        <div className="font-bold text-xl">{value}</div>
       </div>
     </div>
   )
@@ -116,16 +120,16 @@ export function HwListPage() {
   }
 
   return (
-    <div className="mx-auto max-w-[1060px]">
+    <div>
       {/* Header */}
-      <div className="animate-fade-in-up stagger-1 mb-6 flex items-center justify-between">
-        <h1 className="font-heading text-2xl font-bold">作業列表</h1>
+      <div className="stagger-1 mb-6 flex animate-fade-in-up items-center justify-between">
+        <h1 className="font-bold font-heading text-2xl">作業列表</h1>
       </div>
 
       {/* Filters */}
-      <div className="animate-fade-in-up stagger-2 mb-4 grid gap-3 sm:grid-cols-3">
+      <div className="stagger-2 mb-4 grid animate-fade-in-up gap-3 sm:grid-cols-3">
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-muted-foreground">
+          <label className="font-medium text-muted-foreground text-xs">
             發佈日期
           </label>
           <input
@@ -136,7 +140,7 @@ export function HwListPage() {
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-muted-foreground">
+          <label className="font-medium text-muted-foreground text-xs">
             科目
           </label>
           <select
@@ -153,7 +157,7 @@ export function HwListPage() {
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-muted-foreground">
+          <label className="font-medium text-muted-foreground text-xs">
             截止狀態
           </label>
           <select
@@ -170,7 +174,7 @@ export function HwListPage() {
       </div>
 
       {/* Reset */}
-      <div className="animate-fade-in-up stagger-3 mb-5">
+      <div className="stagger-3 mb-5 animate-fade-in-up">
         <Button variant="outline" size="sm" onClick={handleReset}>
           <RotateCcw className="mr-1.5 size-3.5" />
           重置篩選
@@ -178,39 +182,39 @@ export function HwListPage() {
       </div>
 
       {/* Stats */}
-      <div className="animate-fade-in-up stagger-4 mb-5 grid gap-3 sm:grid-cols-2">
+      <div className="stagger-4 mb-5 grid animate-fade-in-up gap-3 sm:grid-cols-2">
         <StatCard icon={BookOpen} label="發佈功課" value={issuedCount} />
         <StatCard icon={Calendar} label="截止功課" value={dueCount} />
       </div>
 
       {/* Table */}
-      <div className="animate-fade-in-up stagger-5 overflow-hidden rounded-xl border border-border/60">
+      <div className="stagger-5 animate-fade-in-up overflow-hidden rounded-xl border border-border/60">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border/60 bg-muted/50">
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <tr className="border-border/60 border-b bg-muted/50">
+                <th className="px-4 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">
                   ID
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <th className="px-4 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">
                   科目
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <th className="px-4 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">
                   作業
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <th className="px-4 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">
                   發佈
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <th className="px-4 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">
                   截止
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <th className="px-4 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">
                   班級
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <th className="px-4 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">
                   狀態
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <th className="px-4 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">
                   備註
                 </th>
               </tr>
@@ -233,10 +237,12 @@ export function HwListPage() {
                     <tr
                       key={it.id}
                       className={cn(
-                        "border-b border-border/40 transition-colors hover:bg-muted/30",
+                        "border-border/40 border-b transition-colors hover:bg-muted/30",
                         idx % 2 === 1 && "bg-muted/10",
-                        status.cls === "overdue" && "bg-destructive/5 hover:bg-destructive/10",
-                        status.cls === "today" && "bg-primary/5 hover:bg-primary/10"
+                        status.cls === "overdue" &&
+                          "bg-destructive/5 hover:bg-destructive/10",
+                        status.cls === "today" &&
+                          "bg-primary/5 hover:bg-primary/10"
                       )}
                     >
                       <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
@@ -271,7 +277,7 @@ export function HwListPage() {
       </div>
 
       {/* Count */}
-      <div className="animate-fade-in-up stagger-5 mt-3 text-right text-xs text-muted-foreground">
+      <div className="stagger-5 mt-3 animate-fade-in-up text-right text-muted-foreground text-xs">
         共 {filtered.length} 項作業
       </div>
     </div>

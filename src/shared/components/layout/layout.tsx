@@ -1,165 +1,49 @@
-import { Link, useLocation } from "react-router-dom"
-import {
-  Home,
-  BookOpen,
-  Calculator,
-  ClipboardList,
-  Menu,
-  X,
-} from "lucide-react"
-import { useEffect, useRef } from "react"
+import { useLocation } from "react-router-dom"
+import { BlogProvider } from "./blog-context"
+import { LeftSidebar } from "./left-sidebar"
+import { Navbar } from "./navbar"
+import { RightSidebar } from "./right-sidebar"
 
-function GithubIcon({ className }: { className?: string }) {
+function LayoutInner({ children }: { children: React.ReactNode }) {
+  const location = useLocation()
+
+  const showRightSidebar =
+    location.pathname === "/" || location.pathname.startsWith("/blog")
+
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-      <path d="M9 18c-4.51 2-5-2-7-2" />
-    </svg>
+    <div className="min-h-screen">
+      <Navbar />
+
+      <div
+        className={
+          showRightSidebar
+            ? "mx-auto grid max-w-[1440px] grid-cols-1 gap-6 px-4 lg:grid-cols-[280px_1fr] lg:px-6 xl:grid-cols-[280px_1fr_256px]"
+            : "mx-auto grid max-w-[1440px] grid-cols-1 gap-6 px-4 lg:grid-cols-[280px_1fr] lg:px-6"
+        }
+      >
+        <LeftSidebar />
+
+        <main
+          className="min-w-0 py-6"
+          style={{ viewTransitionName: "main-content" }}
+        >
+          <div className="rounded-2xl border border-border/60 bg-card/50 p-6 shadow-sm sm:p-8">
+            {children}
+          </div>
+        </main>
+
+        {showRightSidebar && (
+          <RightSidebar isBlogPost={location.pathname.startsWith("/blog/")} />
+        )}
+      </div>
+    </div>
   )
 }
-import { useState } from "react"
-import { Button } from "../ui/button"
-import { cn } from "../../lib/utils"
-
-const navLinks = [
-  { href: "/", label: "主頁", icon: Home },
-  { href: "/blog", label: "網誌", icon: BookOpen },
-  { href: "/hw-list", label: "功課列表", icon: ClipboardList },
-  { href: "/math-game", label: "數學遊戲", icon: Calculator },
-]
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const location = useLocation()
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const contentRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    contentRef.current?.classList.remove("animate-page-fade-in")
-    void contentRef.current?.offsetWidth
-    contentRef.current?.classList.add("animate-page-fade-in")
-  }, [location.pathname])
-
-  const isActive = (href: string) => {
-    if (href === "/") return location.pathname === "/"
-    return location.pathname.startsWith(href)
-  }
-
   return (
-    <div className="mx-auto max-w-[1100px] px-4 py-3 sm:px-6">
-      {/* Header */}
-      <header
-        className={cn(
-          "sticky top-3 z-50 mb-5 flex items-center gap-4 rounded-xl border border-border/60 bg-card/80 px-5 py-3",
-          "shadow-lg backdrop-blur-xl transition-colors duration-200 hover:border-border"
-        )}
-      >
-        <Link to="/" className="mr-3 shrink-0 font-heading text-lg font-bold tracking-tight">
-          ChouChiu
-        </Link>
-
-        {/* Desktop nav */}
-        <nav className="hidden flex-1 items-center gap-1 md:flex">
-          {navLinks.map((link) => (
-            <Button
-              key={link.href}
-              variant={isActive(link.href) ? "secondary" : "ghost"}
-              size="sm"
-              asChild
-              className={cn(
-                "relative",
-                isActive(link.href) &&
-                  "after:absolute after:-bottom-3 after:left-1/2 after:h-[3px] after:w-4 after:-translate-x-1/2 after:rounded-full after:bg-primary"
-              )}
-            >
-              <Link to={link.href}>
-                <link.icon className="mr-1.5 size-4" />
-                {link.label}
-              </Link>
-            </Button>
-          ))}
-          <div className="ml-auto">
-            <Button variant="ghost" size="icon" asChild>
-              <a
-                href="https://github.com/ChouChiu"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <GithubIcon className="size-5" />
-              </a>
-            </Button>
-          </div>
-        </nav>
-
-        {/* Mobile hamburger */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="ml-auto md:hidden"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-        </Button>
-      </header>
-
-        {/* Mobile nav */}
-        <nav
-          className={cn(
-            "mb-4 flex flex-col gap-1 overflow-hidden rounded-xl border border-border/60 bg-card/80 backdrop-blur-xl md:hidden",
-            mobileOpen
-              ? "animate-slide-down p-3"
-              : "hidden"
-          )}
-        >
-          {navLinks.map((link) => (
-            <Button
-              key={link.href}
-              variant={isActive(link.href) ? "secondary" : "ghost"}
-              size="sm"
-              asChild
-              className="justify-start"
-              onClick={() => setMobileOpen(false)}
-            >
-              <Link to={link.href}>
-                <link.icon className="mr-2 size-4" />
-                {link.label}
-              </Link>
-            </Button>
-          ))}
-          <Button variant="ghost" size="sm" asChild className="justify-start">
-            <a
-              href="https://github.com/ChouChiu"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <GithubIcon className="mr-2 size-4" />
-              GitHub
-            </a>
-          </Button>
-        </nav>
-
-      {/* Page content */}
-      <main>
-        <div
-          ref={contentRef}
-          className="animate-page-fade-in rounded-2xl border border-border/60 bg-card/50 p-6 shadow-sm sm:p-8"
-        >
-          {children}
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="mt-8 pb-6 text-center text-sm text-muted-foreground">
-        &copy; {new Date().getFullYear()} ChouChiu. 版權所有。
-      </footer>
-    </div>
+    <BlogProvider>
+      <LayoutInner>{children}</LayoutInner>
+    </BlogProvider>
   )
 }

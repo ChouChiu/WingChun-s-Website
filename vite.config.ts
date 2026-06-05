@@ -1,6 +1,6 @@
-import path from "path"
 import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
+import path from "path"
 import { defineConfig } from "vite"
 
 // https://vite.dev/config/
@@ -13,8 +13,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': {
-        target: 'https://wwchun.top',
+      "/api": {
+        target: "https://wwchun.top",
         changeOrigin: true,
         secure: true,
       },

@@ -1,4 +1,4 @@
-import { CachedData } from './types.js'
+import { CachedData } from "./types.js"
 
 const MEMORY_TTL = 60 * 60 * 1000 // 1 hour
 
@@ -17,10 +17,10 @@ export class CacheManager {
     return cached
   }
 
-  set(key: string, data: CachedData['data']): void {
+  set(key: string, data: CachedData["data"]): void {
     this.memoryCache.set(key, {
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
   }
 

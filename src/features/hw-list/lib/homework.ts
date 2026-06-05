@@ -56,10 +56,7 @@ export function filterHomework(
       due.setHours(0, 0, 0, 0)
 
       if (options.dueStatus === "overdue" && due >= today) return false
-      if (
-        options.dueStatus === "today" &&
-        due.getTime() !== today.getTime()
-      )
+      if (options.dueStatus === "today" && due.getTime() !== today.getTime())
         return false
       if (options.dueStatus === "future" && due <= today) return false
     }

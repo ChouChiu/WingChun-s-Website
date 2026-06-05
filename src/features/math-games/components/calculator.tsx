@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from "react"
 import { Calculator as CalcIcon, X } from "lucide-react"
+import { useCallback, useEffect, useState } from "react"
 import { Button } from "@/shared/components/ui/button"
 import { cn } from "@/shared/lib/utils"
 
@@ -70,7 +70,9 @@ export function CalculatorWidget() {
       const current = parseFloat(display)
       if (prev !== null && op && !waiting) {
         const result = calculate(prev, current, op)
-        const displayVal = isNaN(result) ? "Error" : String(parseFloat(result.toFixed(10)))
+        const displayVal = isNaN(result)
+          ? "Error"
+          : String(parseFloat(result.toFixed(10)))
         setDisplay(displayVal)
         setPrev(isNaN(result) ? null : result)
       } else {
@@ -86,7 +88,9 @@ export function CalculatorWidget() {
     if (prev === null || !op) return
     const current = parseFloat(display)
     const result = calculate(prev, current, op)
-    const displayVal = isNaN(result) ? "Error" : String(parseFloat(result.toFixed(10)))
+    const displayVal = isNaN(result)
+      ? "Error"
+      : String(parseFloat(result.toFixed(10)))
     setDisplay(displayVal)
     setPrev(null)
     setOp(null)
@@ -109,21 +113,29 @@ export function CalculatorWidget() {
       else if (e.key === "/") {
         e.preventDefault()
         handleOp("÷")
-      }
-      else if (e.key === "%" || e.key === "5") handlePercent()
+      } else if (e.key === "%" || e.key === "5") handlePercent()
       else if (e.key === "Enter" || e.key === "=") handleEquals()
       else if (e.key === "Backspace") backspace()
       else if (e.key === "Escape") clearAll()
     }
     window.addEventListener("keydown", handleKey)
     return () => window.removeEventListener("keydown", handleKey)
-  }, [open, inputDigit, inputDot, handleOp, handleEquals, handlePercent, backspace, clearAll])
+  }, [
+    open,
+    inputDigit,
+    inputDot,
+    handleOp,
+    handleEquals,
+    handlePercent,
+    backspace,
+    clearAll,
+  ])
 
   const btn = (label: string, onClick: () => void, variant?: string) => (
     <button
       onClick={onClick}
       className={cn(
-        "flex h-11 items-center justify-center rounded-lg text-sm font-semibold transition-colors",
+        "flex h-11 items-center justify-center rounded-lg font-semibold text-sm transition-colors",
         variant === "op"
           ? "bg-primary/20 text-primary hover:bg-primary/30"
           : variant === "fn"
@@ -140,7 +152,7 @@ export function CalculatorWidget() {
       <Button
         variant="outline"
         size="icon"
-        className="fixed bottom-6 right-6 z-50 size-12 rounded-full shadow-lg"
+        className="fixed right-6 bottom-6 z-50 size-12 rounded-full shadow-lg"
         onClick={() => setOpen(!open)}
       >
         {open ? <X className="size-5" /> : <CalcIcon className="size-5" />}
@@ -148,10 +160,10 @@ export function CalculatorWidget() {
 
       <div
         data-state={open ? "open" : "closed"}
-        className="calc-panel fixed bottom-20 right-6 z-50 w-64 rounded-xl border border-border/60 bg-card/95 p-3 shadow-xl backdrop-blur-xl"
+        className="calc-panel fixed right-6 bottom-20 z-50 w-64 rounded-xl border border-border/60 bg-card/95 p-3 shadow-xl backdrop-blur-xl"
       >
         <div className="mb-2 rounded-lg bg-muted/50 px-3 py-2 text-right">
-          <div className="truncate text-2xl font-bold tabular-nums">
+          <div className="truncate font-bold text-2xl tabular-nums">
             {display}
           </div>
         </div>

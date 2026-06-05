@@ -1,9 +1,9 @@
-import { useState, useRef, useEffect, useCallback } from "react"
+import { ArrowLeft, Compass, Lightbulb, Rocket, Trophy } from "lucide-react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { Button } from "@/shared/components/ui/button"
-import { CalculatorWidget } from "../components/calculator"
 import { cn } from "@/shared/lib/utils"
-import { ArrowLeft, Compass, Lightbulb, Rocket, Trophy } from "lucide-react"
+import { CalculatorWidget } from "../components/calculator"
 
 type Phase = "start" | "playing" | "transition" | "results"
 type Mode = "simple" | "challenge" | "hell" | "final"
@@ -38,7 +38,13 @@ const MODES: Mode[] = ["simple", "challenge", "hell", "final"]
 
 const MODE_CFG: Record<
   Mode,
-  { time: number; choices: number; questions: number; grid: boolean; nums: boolean }
+  {
+    time: number
+    choices: number
+    questions: number
+    grid: boolean
+    nums: boolean
+  }
 > = {
   simple: { time: 20, choices: 3, questions: 3, grid: true, nums: true },
   challenge: { time: 10, choices: 5, questions: 3, grid: false, nums: true },
@@ -317,8 +323,16 @@ function buildAreaQ(
 ): Question {
   const seen = new Set<number>([area])
   const pool = [
-    area + 1, area - 1, area + 2, area - 2, area * 2,
-    Math.ceil(area / 2), area + 3, area - 3, area + 5, area + 4,
+    area + 1,
+    area - 1,
+    area + 2,
+    area - 2,
+    area * 2,
+    Math.ceil(area / 2),
+    area + 3,
+    area - 3,
+    area + 5,
+    area + 4,
   ].filter((v) => v > 0)
   const dists: number[] = []
   for (const c of shuffle(pool)) {
@@ -766,57 +780,56 @@ export function CoordGamePage() {
     if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
   }, [])
 
-  const renderQ = useCallback(
-    (q: Question, mode: Mode) => {
-      const canvas = canvasRef.current
-      if (!canvas) return
-      const c = MODE_CFG[mode]
-      const points: GraphPoint[] = []
-      let edges: [GraphPoint, GraphPoint][] | undefined
-      let reflectionAxis: "x" | "y" | "origin" | undefined
-      let translation: { dx: number; dy: number } | undefined
-      let translationFrom: GraphPoint | undefined
-      let translationTo: GraphPoint | undefined
+  const renderQ = useCallback((q: Question, mode: Mode) => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const c = MODE_CFG[mode]
+    const points: GraphPoint[] = []
+    let edges: [GraphPoint, GraphPoint][] | undefined
+    let reflectionAxis: "x" | "y" | "origin" | undefined
+    let translation: { dx: number; dy: number } | undefined
+    let translationFrom: GraphPoint | undefined
+    let translationTo: GraphPoint | undefined
 
-      if (q.type === "identify") {
-        if (q.target)
-          points.push({ ...q.target, color: q.target.color || "#479ef5" })
-        if (q.refs)
-          for (const rp of q.refs)
-            points.push({ ...rp, color: rp.color || "#ff9800", showCoords: true })
-      } else if (q.type === "area" && q.shape) {
-        for (const sp of q.shape)
-          points.push({ ...sp, color: sp.color || "#479ef5", showCoords: true })
-        edges = []
-        for (let i = 0; i < q.shape.length; i++)
-          edges.push([q.shape[i], q.shape[(i + 1) % q.shape.length]])
-      } else if (q.type === "reflection") {
-        if (q.originalPoint) points.push({ ...q.originalPoint })
-        if (q.reflectedPoint) points.push({ ...q.reflectedPoint })
-        reflectionAxis = q.reflectionAxis
-      } else if (q.type === "translation") {
-        if (q.originalPoint) points.push({ ...q.originalPoint })
-        if (q.translatedPoint) points.push({ ...q.translatedPoint })
-        translation = q.translation
-        translationFrom = q.originalPoint
-        translationTo = q.translatedPoint
-      }
+    if (q.type === "identify") {
+      if (q.target)
+        points.push({ ...q.target, color: q.target.color || "#479ef5" })
+      if (q.refs)
+        for (const rp of q.refs)
+          points.push({ ...rp, color: rp.color || "#ff9800", showCoords: true })
+    } else if (q.type === "area" && q.shape) {
+      for (const sp of q.shape)
+        points.push({ ...sp, color: sp.color || "#479ef5", showCoords: true })
+      edges = []
+      for (let i = 0; i < q.shape.length; i++)
+        edges.push([q.shape[i], q.shape[(i + 1) % q.shape.length]])
+    } else if (q.type === "reflection") {
+      if (q.originalPoint) points.push({ ...q.originalPoint })
+      if (q.reflectedPoint) points.push({ ...q.reflectedPoint })
+      reflectionAxis = q.reflectionAxis
+    } else if (q.type === "translation") {
+      if (q.originalPoint) points.push({ ...q.originalPoint })
+      if (q.translatedPoint) points.push({ ...q.translatedPoint })
+      translation = q.translation
+      translationFrom = q.originalPoint
+      translationTo = q.translatedPoint
+    }
 
-      drawGraph(canvas, {
-        showGrid: c.grid,
-        showNumbers: c.nums,
-        points,
-        edges,
-        reflectionAxis,
-        translation,
-        translationFrom,
-        translationTo,
-      })
-    },
-    []
-  )
+    drawGraph(canvas, {
+      showGrid: c.grid,
+      showNumbers: c.nums,
+      points,
+      edges,
+      reflectionAxis,
+      translation,
+      translationFrom,
+      translationTo,
+    })
+  }, [])
 
-  const loadNextQuestionRef = useRef<(mode: Mode, qIdx: number) => void>(() => {})
+  const loadNextQuestionRef = useRef<(mode: Mode, qIdx: number) => void>(() => {
+    /* noop */
+  })
 
   const loadNextQuestion = useCallback(
     (mode: Mode, qIdx: number) => {
@@ -894,9 +907,7 @@ export function CoordGamePage() {
       } else if (mode === "final" && qIdx === 0) {
         finalStartRef.current = Date.now()
         finalClockRef.current = window.setInterval(() => {
-          const el = Math.round(
-            (Date.now() - finalStartRef.current) / 1000
-          )
+          const el = Math.round((Date.now() - finalStartRef.current) / 1000)
           setFinalElapsed(el)
         }, 1000)
       }
@@ -946,11 +957,7 @@ export function CoordGamePage() {
       }
 
       setTimeout(
-        () =>
-          loadNextQuestion(
-            modeRef.current,
-            qIdxRef.current + 1
-          ),
+        () => loadNextQuestion(modeRef.current, qIdxRef.current + 1),
         1400
       )
     },
@@ -959,19 +966,12 @@ export function CoordGamePage() {
 
   const continueFromTransition = useCallback(() => {
     setPhase("playing")
-    loadNextQuestion(
-      modeRef.current,
-      0
-    )
+    loadNextQuestion(modeRef.current, 0)
   }, [loadNextQuestion])
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (
-        phase === "playing" &&
-        answerRef.current === "idle" &&
-        question
-      ) {
+      if (phase === "playing" && answerRef.current === "idle" && question) {
         const num = parseInt(e.key, 10)
         if (num >= 1 && num <= question.choices.length) pickAnswer(num - 1)
       }
@@ -1023,64 +1023,78 @@ export function CoordGamePage() {
         : TIPS[currentMode]
 
   return (
-    <div className="mx-auto max-w-[860px]">
+    <div>
       {/* START */}
       {phase === "start" && (
         <>
-          <Button variant="ghost" size="sm" asChild className="animate-fade-in-up stagger-1 mb-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+            className="stagger-1 mb-2 animate-fade-in-up"
+          >
             <Link to="/math-game">
               <ArrowLeft className="mr-1.5 size-4" />
               Back to Math Games
             </Link>
           </Button>
           <div className="flex flex-col items-center gap-5 py-10 text-center">
-          <div className="animate-fade-in-up stagger-2 text-5xl text-primary"><Compass className="size-12" /></div>
-          <h1 className="animate-fade-in-up stagger-3 font-heading text-3xl font-bold">
-            Coordinate Challenge
-          </h1>
-          <p className="animate-fade-in-up stagger-4 max-w-[540px] text-sm leading-relaxed text-muted-foreground">
-            Test your coordinate geometry skills across 4 progressive levels.
-            Identify points, use reference clues, calculate areas, and master
-            reflections &amp; translations!
-          </p>
-          <div className="animate-fade-in-up stagger-5 grid w-full max-w-[540px] grid-cols-2 gap-3">
-            {(
-              [
-                {
-                  mode: "simple" as Mode,
-                  color: "text-blue-400",
-                  desc: "Grid + Labels · 20s · 3 choices",
-                },
-                {
-                  mode: "challenge" as Mode,
-                  color: "text-amber-400",
-                  desc: "No Grid · 10s · 5 choices",
-                },
-                {
-                  mode: "hell" as Mode,
-                  color: "text-red-400",
-                  desc: "No Grid/Labels · Identify + Reflect + Translate",
-                },
-                {
-                  mode: "final" as Mode,
-                  color: "text-purple-400",
-                  desc: "Area + Identify + Reflect + Translate",
-                },
-              ] as const
-            ).map((m) => (
-              <div
-                key={m.mode}
-                className="flex flex-col gap-1 rounded-lg border border-border/60 bg-muted/30 p-3 text-center"
-              >
-                <strong className={cn("text-sm", m.color)}>
-                  {MODE_LABELS[m.mode]}
-                </strong>
-                <span className="text-xs text-muted-foreground">{m.desc}</span>
-              </div>
-            ))}
+            <div className="stagger-2 animate-fade-in-up text-5xl text-primary">
+              <Compass className="size-12" />
+            </div>
+            <h1 className="stagger-3 animate-fade-in-up font-bold font-heading text-3xl">
+              Coordinate Challenge
+            </h1>
+            <p className="stagger-4 max-w-[540px] animate-fade-in-up text-muted-foreground text-sm leading-relaxed">
+              Test your coordinate geometry skills across 4 progressive levels.
+              Identify points, use reference clues, calculate areas, and master
+              reflections &amp; translations!
+            </p>
+            <div className="stagger-5 grid w-full max-w-[540px] animate-fade-in-up grid-cols-2 gap-3">
+              {(
+                [
+                  {
+                    mode: "simple" as Mode,
+                    color: "text-blue-400",
+                    desc: "Grid + Labels · 20s · 3 choices",
+                  },
+                  {
+                    mode: "challenge" as Mode,
+                    color: "text-amber-400",
+                    desc: "No Grid · 10s · 5 choices",
+                  },
+                  {
+                    mode: "hell" as Mode,
+                    color: "text-red-400",
+                    desc: "No Grid/Labels · Identify + Reflect + Translate",
+                  },
+                  {
+                    mode: "final" as Mode,
+                    color: "text-purple-400",
+                    desc: "Area + Identify + Reflect + Translate",
+                  },
+                ] as const
+              ).map((m) => (
+                <div
+                  key={m.mode}
+                  className="flex flex-col gap-1 rounded-lg border border-border/60 bg-muted/30 p-3 text-center"
+                >
+                  <strong className={cn("text-sm", m.color)}>
+                    {MODE_LABELS[m.mode]}
+                  </strong>
+                  <span className="text-muted-foreground text-xs">
+                    {m.desc}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <Button
+              className="stagger-6 animate-fade-in-up"
+              onClick={startGame}
+            >
+              Start Game
+            </Button>
           </div>
-          <Button className="animate-fade-in-up stagger-6" onClick={startGame}>Start Game</Button>
-        </div>
         </>
       )}
 
@@ -1092,21 +1106,26 @@ export function CoordGamePage() {
             <div className="overflow-hidden rounded-xl border border-border/60 bg-muted/20">
               <canvas
                 ref={canvasRef}
-                className="block aspect-square w-full max-h-[440px] min-h-[220px] min-w-[220px]"
+                className="block aspect-square max-h-[440px] min-h-[220px] w-full min-w-[220px]"
               />
             </div>
 
             {/* Tips */}
             <div className="hidden flex-col gap-3 rounded-xl border border-border/60 bg-muted/30 p-4 lg:flex lg:min-w-[200px] lg:max-w-[280px]">
-              <div className="flex items-center gap-2 border-b border-border/60 pb-2">
-                <span className="text-lg text-amber-400"><Lightbulb className="size-5" /></span>
-                <strong className="text-xs font-semibold uppercase tracking-wider">
+              <div className="flex items-center gap-2 border-border/60 border-b pb-2">
+                <span className="text-amber-400 text-lg">
+                  <Lightbulb className="size-5" />
+                </span>
+                <strong className="font-semibold text-xs uppercase tracking-wider">
                   Tips
                 </strong>
               </div>
               <div className="flex flex-col gap-2">
                 {tipsForMode.map((t, i) => (
-                  <p key={i} className="text-xs leading-relaxed text-muted-foreground">
+                  <p
+                    key={i}
+                    className="text-muted-foreground text-xs leading-relaxed"
+                  >
                     {t}
                   </p>
                 ))}
@@ -1118,13 +1137,11 @@ export function CoordGamePage() {
               <div className="rounded-xl border border-border/60 bg-muted/30 p-4">
                 <span
                   className={cn(
-                    "mb-3 inline-block rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider",
-                    currentMode === "simple" &&
-                      "bg-blue-500/15 text-blue-400",
+                    "mb-3 inline-block rounded-full px-3 py-1 font-semibold text-xs uppercase tracking-wider",
+                    currentMode === "simple" && "bg-blue-500/15 text-blue-400",
                     currentMode === "challenge" &&
                       "bg-amber-500/15 text-amber-400",
-                    currentMode === "hell" &&
-                      "bg-red-500/15 text-red-400",
+                    currentMode === "hell" && "bg-red-500/15 text-red-400",
                     currentMode === "final" &&
                       "bg-purple-500/15 text-purple-400"
                   )}
@@ -1133,7 +1150,7 @@ export function CoordGamePage() {
                 </span>
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between rounded-md bg-background/50 px-2.5 py-1.5">
-                    <small className="text-xs text-muted-foreground">
+                    <small className="text-muted-foreground text-xs">
                       Question
                     </small>
                     <strong className="text-sm">
@@ -1141,24 +1158,24 @@ export function CoordGamePage() {
                     </strong>
                   </div>
                   <div className="flex items-center justify-between rounded-md bg-background/50 px-2.5 py-1.5">
-                    <small className="text-xs text-muted-foreground">
+                    <small className="text-muted-foreground text-xs">
                       Score
                     </small>
-                    <strong className="text-sm text-blue-400">{score}</strong>
+                    <strong className="text-blue-400 text-sm">{score}</strong>
                   </div>
                   <div className="flex items-center justify-between rounded-md bg-background/50 px-2.5 py-1.5">
-                    <small className="text-xs text-muted-foreground">
+                    <small className="text-muted-foreground text-xs">
                       Correct
                     </small>
-                    <strong className="text-sm text-green-500">
+                    <strong className="text-green-500 text-sm">
                       {correctCount}
                     </strong>
                   </div>
                   <div className="flex items-center justify-between rounded-md bg-background/50 px-2.5 py-1.5">
-                    <small className="text-xs text-muted-foreground">
+                    <small className="text-muted-foreground text-xs">
                       Wrong
                     </small>
-                    <strong className="text-sm text-red-500">
+                    <strong className="text-red-500 text-sm">
                       {wrongCount}
                     </strong>
                   </div>
@@ -1168,14 +1185,14 @@ export function CoordGamePage() {
                 {cfg.time > 0 && (
                   <div className="mt-3 rounded-md bg-background/50 p-2.5">
                     <div className="flex items-center justify-between">
-                      <small className="text-xs text-muted-foreground">
+                      <small className="text-muted-foreground text-xs">
                         Time
                       </small>
                       <strong
                         className={cn(
-                          "text-lg font-bold",
+                          "font-bold text-lg",
                           timeLeft <= 3
-                            ? "text-red-500 animate-pulse"
+                            ? "animate-pulse text-red-500"
                             : timeLeft <= 5
                               ? "text-amber-500"
                               : "text-green-500"
@@ -1187,7 +1204,7 @@ export function CoordGamePage() {
                     <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-background">
                       <div
                         className={cn(
-                          "h-full rounded-full transition-all duration-1000 linear",
+                          "linear h-full rounded-full transition-all duration-1000",
                           timeLeft <= 3
                             ? "bg-red-500"
                             : timeLeft <= 5
@@ -1205,7 +1222,7 @@ export function CoordGamePage() {
                 {/* Final elapsed */}
                 {currentMode === "final" && (
                   <div className="mt-3 flex items-center justify-between rounded-md bg-background/50 px-2.5 py-1.5">
-                    <small className="text-xs text-muted-foreground">
+                    <small className="text-muted-foreground text-xs">
                       Elapsed
                     </small>
                     <strong className="text-sm">{finalElapsed}s</strong>
@@ -1216,14 +1233,14 @@ export function CoordGamePage() {
           </div>
 
           {/* Prompt */}
-          <p className="py-2 text-center text-base font-semibold">
+          <p className="py-2 text-center font-semibold text-base">
             {question?.prompt}
           </p>
 
           {/* Hint for hell/final */}
           {(currentMode === "hell" ||
             (currentMode === "final" && question?.type !== "area")) && (
-            <p className="text-center text-xs italic text-muted-foreground">
+            <p className="text-center text-muted-foreground text-xs italic">
               Use the reference points A and B to deduce P's coordinates.
             </p>
           )}
@@ -1238,7 +1255,7 @@ export function CoordGamePage() {
                 className={cn(
                   "inline-flex min-w-[110px] items-center gap-2 rounded-lg border px-4 py-2.5 font-mono text-sm transition-all",
                   answerState === "idle" &&
-                    "border-border bg-muted/30 hover:border-primary hover:bg-muted/50 hover:-translate-y-0.5",
+                    "border-border bg-muted/30 hover:-translate-y-0.5 hover:border-primary hover:bg-muted/50",
                   answerState === "correct" &&
                     i === question.correctIdx &&
                     "border-green-500 bg-green-500/20 text-green-400",
@@ -1255,7 +1272,7 @@ export function CoordGamePage() {
                   answerState !== "idle" && "cursor-default opacity-60"
                 )}
               >
-                <span className="flex size-5 items-center justify-center rounded bg-muted text-[10px] font-semibold text-muted-foreground">
+                <span className="flex size-5 items-center justify-center rounded bg-muted font-semibold text-[10px] text-muted-foreground">
                   {i + 1}
                 </span>
                 {c}
@@ -1267,13 +1284,10 @@ export function CoordGamePage() {
           {answerState !== "idle" && (
             <div
               className={cn(
-                "rounded-lg px-4 py-2 text-center text-sm font-medium",
-                answerState === "correct" &&
-                  "bg-green-500/15 text-green-400",
-                answerState === "wrong" &&
-                  "bg-red-500/15 text-red-400",
-                answerState === "timeout" &&
-                  "bg-amber-500/15 text-amber-400"
+                "rounded-lg px-4 py-2 text-center font-medium text-sm",
+                answerState === "correct" && "bg-green-500/15 text-green-400",
+                answerState === "wrong" && "bg-red-500/15 text-red-400",
+                answerState === "timeout" && "bg-amber-500/15 text-amber-400"
               )}
             >
               {answerState === "correct"
@@ -1287,16 +1301,22 @@ export function CoordGamePage() {
       {/* TRANSITION */}
       {phase === "transition" && (
         <div className="flex flex-col items-center gap-4 py-16 text-center">
-          <div className="animate-fade-in-up stagger-1 text-5xl text-primary"><Rocket className="size-12" /></div>
-          <h2 className="animate-fade-in-up stagger-2 font-heading text-2xl font-bold">
+          <div className="stagger-1 animate-fade-in-up text-5xl text-primary">
+            <Rocket className="size-12" />
+          </div>
+          <h2 className="stagger-2 animate-fade-in-up font-bold font-heading text-2xl">
             {TRANSITION_MSG[currentMode]?.title || "Get Ready!"}
           </h2>
-          <p className="animate-fade-in-up stagger-3 max-w-[400px] text-sm text-muted-foreground">
-            {TRANSITION_MSG[currentMode]?.sub ||
-              "Next challenge incoming!"}
+          <p className="stagger-3 max-w-[400px] animate-fade-in-up text-muted-foreground text-sm">
+            {TRANSITION_MSG[currentMode]?.sub || "Next challenge incoming!"}
           </p>
-          <Button className="animate-fade-in-up stagger-4" onClick={continueFromTransition}>Continue</Button>
-          <span className="animate-fade-in-up stagger-5 text-xs text-muted-foreground">
+          <Button
+            className="stagger-4 animate-fade-in-up"
+            onClick={continueFromTransition}
+          >
+            Continue
+          </Button>
+          <span className="stagger-5 animate-fade-in-up text-muted-foreground text-xs">
             or press Enter / Space
           </span>
         </div>
@@ -1305,28 +1325,32 @@ export function CoordGamePage() {
       {/* RESULTS */}
       {phase === "results" && (
         <div className="flex flex-col items-center gap-4 py-10 text-center">
-          <div className="animate-fade-in-up stagger-1 text-5xl text-primary"><Trophy className="size-12" /></div>
-          <h2 className="animate-fade-in-up stagger-2 font-heading text-2xl font-bold">Game Complete!</h2>
-          <div className="animate-fade-in-up stagger-3 grid w-full max-w-[400px] grid-cols-2 gap-3">
+          <div className="stagger-1 animate-fade-in-up text-5xl text-primary">
+            <Trophy className="size-12" />
+          </div>
+          <h2 className="stagger-2 animate-fade-in-up font-bold font-heading text-2xl">
+            Game Complete!
+          </h2>
+          <div className="stagger-3 grid w-full max-w-[400px] animate-fade-in-up grid-cols-2 gap-3">
             <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
-              <small className="text-xs text-muted-foreground">
+              <small className="text-muted-foreground text-xs">
                 Final Score
               </small>
-              <p className="text-2xl font-bold text-blue-400">{score}</p>
+              <p className="font-bold text-2xl text-blue-400">{score}</p>
             </div>
             <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
-              <small className="text-xs text-muted-foreground">Correct</small>
-              <p className="text-2xl font-bold text-green-500">
+              <small className="text-muted-foreground text-xs">Correct</small>
+              <p className="font-bold text-2xl text-green-500">
                 {correctCount}
               </p>
             </div>
             <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
-              <small className="text-xs text-muted-foreground">Wrong</small>
-              <p className="text-2xl font-bold text-red-500">{wrongCount}</p>
+              <small className="text-muted-foreground text-xs">Wrong</small>
+              <p className="font-bold text-2xl text-red-500">{wrongCount}</p>
             </div>
             <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
-              <small className="text-xs text-muted-foreground">Accuracy</small>
-              <p className="text-2xl font-bold">
+              <small className="text-muted-foreground text-xs">Accuracy</small>
+              <p className="font-bold text-2xl">
                 {total > 0
                   ? `${Math.round((correctCount / total) * 100)}%`
                   : "0%"}
@@ -1335,23 +1359,23 @@ export function CoordGamePage() {
             {finalElapsed > 0 && (
               <>
                 <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
-                  <small className="text-xs text-muted-foreground">
+                  <small className="text-muted-foreground text-xs">
                     Final Challenge Time
                   </small>
-                  <p className="text-2xl font-bold">{finalElapsed}s</p>
+                  <p className="font-bold text-2xl">{finalElapsed}s</p>
                 </div>
                 <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
-                  <small className="text-xs text-muted-foreground">
+                  <small className="text-muted-foreground text-xs">
                     Time Bonus
                   </small>
-                  <p className="text-2xl font-bold text-blue-400">
+                  <p className="font-bold text-2xl text-blue-400">
                     +{Math.max(0, 300 - finalElapsed)}
                   </p>
                 </div>
               </>
             )}
           </div>
-          <div className="animate-fade-in-up stagger-4 flex gap-3">
+          <div className="stagger-4 flex animate-fade-in-up gap-3">
             <Button onClick={startGame}>Play Again</Button>
             <Button
               variant="outline"

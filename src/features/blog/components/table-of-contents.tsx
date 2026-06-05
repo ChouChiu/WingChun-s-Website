@@ -1,6 +1,6 @@
+import { List } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { extractHeadings, type TocItem } from "../lib/toc"
-import { List } from "lucide-react"
 
 interface TableOfContentsProps {
   content: string
@@ -21,11 +21,11 @@ export function TableOfContents({ content }: TableOfContentsProps) {
           }
         }
       },
-      { rootMargin: "-80px 0px -80% 0px" },
+      { rootMargin: "-80px 0px -80% 0px" }
     )
 
     const headingElements = document.querySelectorAll(
-      ".markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6",
+      ".markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6"
     )
 
     headingElements.forEach((element) => {
@@ -35,13 +35,13 @@ export function TableOfContents({ content }: TableOfContentsProps) {
     })
 
     return () => observer.disconnect()
-  }, [content])
+  }, [])
 
   useEffect(() => {
     if (!listRef.current || !indicatorRef.current) return
 
     const activeLink = listRef.current.querySelector(
-      `a[href="#${activeId}"]`,
+      `a[href="#${activeId}"]`
     ) as HTMLElement | null
 
     if (activeLink) {
@@ -63,7 +63,7 @@ export function TableOfContents({ content }: TableOfContentsProps) {
 
   return (
     <nav className="toc">
-      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
+      <div className="mb-3 flex items-center gap-2 font-semibold text-foreground text-sm">
         <List className="size-4" />
         <span>On This Page</span>
       </div>

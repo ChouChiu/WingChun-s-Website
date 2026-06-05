@@ -1,24 +1,24 @@
-import { useMemo, useState, useCallback } from "react"
-import ReactMarkdown from "react-markdown"
-import remarkGfm from "remark-gfm"
-import remarkEmoji from "remark-emoji"
-import remarkMath from "remark-math"
-import rehypeKatex from "rehype-katex"
-import rehypeRaw from "rehype-raw"
-import { rehypeGithubAlerts } from "rehype-github-alerts"
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
-import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism"
 import { Icon } from "@iconify/react"
 import { Check, Copy } from "lucide-react"
+import { useCallback, useMemo, useState } from "react"
 import type { Components, ExtraProps } from "react-markdown"
-import { slugify } from "../lib/toc"
-
+import ReactMarkdown from "react-markdown"
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
+import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism"
+import { rehypeGithubAlerts } from "rehype-github-alerts"
+import rehypeKatex from "rehype-katex"
+import rehypeRaw from "rehype-raw"
+import remarkEmoji from "remark-emoji"
+import remarkGfm from "remark-gfm"
+import remarkMath from "remark-math"
 import { GitHubContributionCard } from "@/features/github/components/contribution-card"
+import { slugify } from "../lib/toc"
 
 import "katex/dist/katex.min.css"
 
-function stripNode<T extends Record<string, unknown>>(props: T): Omit<T, "node"> {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+function stripNode<T extends Record<string, unknown>>(
+  props: T
+): Omit<T, "node"> {
   const { node, ...rest } = props
   return rest as Omit<T, "node">
 }
@@ -34,7 +34,13 @@ function extractText(children: React.ReactNode): string {
   return ""
 }
 
-function CodeBlock({ language, codeString }: { language: string; codeString: string }) {
+function CodeBlock({
+  language,
+  codeString,
+}: {
+  language: string
+  codeString: string
+}) {
   const [copied, setCopied] = useState(false)
 
   const handleCopy = useCallback(async () => {
@@ -87,42 +93,70 @@ const markdownComponents: Components = {
     const cleanProps = stripNode(props)
     const text = extractText(children)
     const id = slugify(text)
-    return <h1 id={id} {...cleanProps}>{children}</h1>
+    return (
+      <h1 id={id} {...cleanProps}>
+        {children}
+      </h1>
+    )
   },
   h2({ children, ...props }) {
     const cleanProps = stripNode(props)
     const text = extractText(children)
     const id = slugify(text)
-    return <h2 id={id} {...cleanProps}>{children}</h2>
+    return (
+      <h2 id={id} {...cleanProps}>
+        {children}
+      </h2>
+    )
   },
   h3({ children, ...props }) {
     const cleanProps = stripNode(props)
     const text = extractText(children)
     const id = slugify(text)
-    return <h3 id={id} {...cleanProps}>{children}</h3>
+    return (
+      <h3 id={id} {...cleanProps}>
+        {children}
+      </h3>
+    )
   },
   h4({ children, ...props }) {
     const cleanProps = stripNode(props)
     const text = extractText(children)
     const id = slugify(text)
-    return <h4 id={id} {...cleanProps}>{children}</h4>
+    return (
+      <h4 id={id} {...cleanProps}>
+        {children}
+      </h4>
+    )
   },
   h5({ children, ...props }) {
     const cleanProps = stripNode(props)
     const text = extractText(children)
     const id = slugify(text)
-    return <h5 id={id} {...cleanProps}>{children}</h5>
+    return (
+      <h5 id={id} {...cleanProps}>
+        {children}
+      </h5>
+    )
   },
   h6({ children, ...props }) {
     const cleanProps = stripNode(props)
     const text = extractText(children)
     const id = slugify(text)
-    return <h6 id={id} {...cleanProps}>{children}</h6>
+    return (
+      <h6 id={id} {...cleanProps}>
+        {children}
+      </h6>
+    )
   },
   pre({ children }) {
     return <>{children}</>
   },
-  code({ className, children, ...props }: React.HTMLAttributes<HTMLElement> & ExtraProps) {
+  code({
+    className,
+    children,
+    ...props
+  }: React.HTMLAttributes<HTMLElement> & ExtraProps) {
     const cleanProps = stripNode(props)
     const match = /language-(\w+)/.exec(className || "")
     const language = match ? match[1] : ""
@@ -145,7 +179,11 @@ const markdownComponents: Components = {
       </div>
     )
   },
-  a({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement> & ExtraProps) {
+  a({
+    href,
+    children,
+    ...props
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & ExtraProps) {
     const cleanProps = stripNode(props)
     const isExternal = href?.startsWith("http")
     return (
@@ -160,7 +198,10 @@ const markdownComponents: Components = {
       </a>
     )
   },
-  input({ checked, ...props }: React.InputHTMLAttributes<HTMLInputElement> & ExtraProps) {
+  input({
+    checked,
+    ...props
+  }: React.InputHTMLAttributes<HTMLInputElement> & ExtraProps) {
     const cleanProps = stripNode(props)
     return (
       <input
@@ -172,14 +213,22 @@ const markdownComponents: Components = {
       />
     )
   },
-  div({ children, ...props }: React.HTMLAttributes<HTMLDivElement> & ExtraProps & Record<string, unknown>) {
+  div({
+    children,
+    ...props
+  }: React.HTMLAttributes<HTMLDivElement> &
+    ExtraProps &
+    Record<string, unknown>) {
     const cleanProps = stripNode(props)
-    const repos = cleanProps['data-github-contribution'] as string | undefined
+    const repos = cleanProps["data-github-contribution"] as string | undefined
     if (repos) {
-      const repoList = repos.split('|').map(r => r.trim()).filter(Boolean)
+      const repoList = repos
+        .split("|")
+        .map((r) => r.trim())
+        .filter(Boolean)
       return (
         <div className="flex flex-col gap-4">
-          {repoList.map(repo => (
+          {repoList.map((repo) => (
             <GitHubContributionCard key={repo} repo={repo} />
           ))}
         </div>
@@ -197,7 +246,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   const remarkPlugins = useMemo(() => [remarkGfm, remarkEmoji, remarkMath], [])
   const rehypePlugins = useMemo(
     () => [rehypeRaw, rehypeKatex, rehypeGithubAlerts],
-    [],
+    []
   )
 
   return (

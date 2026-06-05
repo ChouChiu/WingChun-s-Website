@@ -1,9 +1,9 @@
-import { useState, useRef, useEffect, useCallback } from "react"
+import { ArrowLeft } from "lucide-react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { Button } from "@/shared/components/ui/button"
-import { CalculatorWidget } from "../components/calculator"
 import { cn } from "@/shared/lib/utils"
-import { ArrowLeft } from "lucide-react"
+import { CalculatorWidget } from "../components/calculator"
 
 const STORAGE_KEY = "percentGameData_v3"
 const TARGET_SCORE = 150
@@ -87,7 +87,13 @@ function drawBox(
   h: number,
   label: string,
   value: string,
-  colors: { boxBg: string; strokeColor: string; textPrimary: string; textSecondary: string; accent: string }
+  colors: {
+    boxBg: string
+    strokeColor: string
+    textPrimary: string
+    textSecondary: string
+    accent: string
+  }
 ) {
   const left = x - w / 2
   const top = y - h / 2
@@ -118,7 +124,13 @@ function drawMidBox(
   h: number,
   label: string,
   value: string,
-  colors: { boxBg: string; strokeColor: string; textPrimary: string; textSecondary: string; accent: string }
+  colors: {
+    boxBg: string
+    strokeColor: string
+    textPrimary: string
+    textSecondary: string
+    accent: string
+  }
 ) {
   const left = x - w / 2
   const top = y - h / 2
@@ -208,9 +220,32 @@ function drawProblem(canvas: HTMLCanvasElement, p: Problem) {
 
   drawBox(ctx, oldX, centerY, boxW, boxH, "Old", p.display.old, colors)
   drawBox(ctx, newX, centerY, boxW, boxH, "New", p.display.new, colors)
-  drawMidBox(ctx, midX, centerY, midBoxW, boxH, "% Change", p.display.mid, colors)
-  drawArrow(ctx, oldX + boxW / 2 + 5, centerY, midX - midBoxW / 2 - 5, centerY, colors)
-  drawArrow(ctx, midX + midBoxW / 2 + 5, centerY, newX - boxW / 2 - 5, centerY, colors)
+  drawMidBox(
+    ctx,
+    midX,
+    centerY,
+    midBoxW,
+    boxH,
+    "% Change",
+    p.display.mid,
+    colors
+  )
+  drawArrow(
+    ctx,
+    oldX + boxW / 2 + 5,
+    centerY,
+    midX - midBoxW / 2 - 5,
+    centerY,
+    colors
+  )
+  drawArrow(
+    ctx,
+    midX + midBoxW / 2 + 5,
+    centerY,
+    newX - boxW / 2 - 5,
+    centerY,
+    colors
+  )
 }
 
 function generateQuestion(): Problem {
@@ -235,13 +270,28 @@ function generateQuestion(): Problem {
 
   if (type === 0) {
     problem.answer = newVal
-    problem.display = { old: String(oldVal), mid: factorText, new: "?", mode: "findNew" }
+    problem.display = {
+      old: String(oldVal),
+      mid: factorText,
+      new: "?",
+      mode: "findNew",
+    }
   } else if (type === 1) {
     problem.answer = oldVal
-    problem.display = { old: "?", mid: factorText, new: String(newVal), mode: "findOld" }
+    problem.display = {
+      old: "?",
+      mid: factorText,
+      new: String(newVal),
+      mode: "findOld",
+    }
   } else {
     problem.answer = isIncrease ? percent : -percent
-    problem.display = { old: String(oldVal), mid: "( 1 + ? % )", new: String(newVal), mode: "findPercent" }
+    problem.display = {
+      old: String(oldVal),
+      mid: "( 1 + ? % )",
+      new: String(newVal),
+      mode: "findPercent",
+    }
   }
 
   return problem
@@ -304,12 +354,15 @@ export function PercentageGamePage() {
     if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
   }, [])
 
-  const drawCurr = useCallback((p: Problem) => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    setupCanvas()
-    drawProblem(canvas, p)
-  }, [setupCanvas])
+  const drawCurr = useCallback(
+    (p: Problem) => {
+      const canvas = canvasRef.current
+      if (!canvas) return
+      setupCanvas()
+      drawProblem(canvas, p)
+    },
+    [setupCanvas]
+  )
 
   const genAndDraw = useCallback(() => {
     const p = generateQuestion()
@@ -462,21 +515,26 @@ export function PercentageGamePage() {
   const total = correctCount + wrongCount
 
   return (
-    <div className="mx-auto max-w-[860px]">
-      <Button variant="ghost" size="sm" asChild className="animate-fade-in-up stagger-1 mb-3">
+    <div>
+      <Button
+        variant="ghost"
+        size="sm"
+        asChild
+        className="stagger-1 mb-3 animate-fade-in-up"
+      >
         <Link to="/math-game">
           <ArrowLeft className="mr-1.5 size-4" />
           Back to Math Games
         </Link>
       </Button>
 
-      <h1 className="animate-fade-in-up stagger-2 mb-4 font-heading text-2xl font-bold">
+      <h1 className="stagger-2 mb-4 animate-fade-in-up font-bold font-heading text-2xl">
         Percent Change Practice
       </h1>
 
       {/* Status Bar */}
-      <div className="animate-fade-in-up stagger-3 mb-4 flex flex-wrap items-center gap-2">
-        <div className="rounded-lg border border-border/60 bg-muted/30 px-3 py-1.5 text-sm font-semibold">
+      <div className="stagger-3 mb-4 flex animate-fade-in-up flex-wrap items-center gap-2">
+        <div className="rounded-lg border border-border/60 bg-muted/30 px-3 py-1.5 font-semibold text-sm">
           Target: {TARGET_SCORE}
         </div>
         <div className="rounded-lg border border-border/60 bg-muted/30 px-3 py-1.5 text-sm">
@@ -488,7 +546,7 @@ export function PercentageGamePage() {
       </div>
 
       {/* Progress */}
-      <div className="animate-fade-in-up stagger-4 mb-5 h-1.5 overflow-hidden rounded-full bg-muted">
+      <div className="stagger-4 mb-5 h-1.5 animate-fade-in-up overflow-hidden rounded-full bg-muted">
         <div
           className="h-full rounded-full bg-gradient-to-r from-primary to-blue-400 transition-all duration-500"
           style={{ width: `${pct}%` }}
@@ -496,7 +554,7 @@ export function PercentageGamePage() {
       </div>
 
       {/* Canvas Area */}
-      <div className="animate-fade-in-up stagger-5 mb-5 flex flex-col items-center gap-4 rounded-xl border border-border/60 bg-muted/20 p-6">
+      <div className="stagger-5 mb-5 flex animate-fade-in-up flex-col items-center gap-4 rounded-xl border border-border/60 bg-muted/20 p-6">
         <canvas
           ref={canvasRef}
           className="max-w-full rounded-md"
@@ -504,11 +562,11 @@ export function PercentageGamePage() {
         />
 
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <label className="text-sm font-semibold">Answer:</label>
+          <label className="font-semibold text-sm">Answer:</label>
           <input
             ref={inputRef}
             type="number"
-            className="w-36 rounded-md border-b-2 border-border bg-background px-3 py-1.5 text-center text-lg font-semibold outline-none focus:border-primary"
+            className="w-36 rounded-md border-border border-b-2 bg-background px-3 py-1.5 text-center font-semibold text-lg outline-none focus:border-primary"
             aria-label="Answer"
           />
           <Button onClick={checkAnswer}>Submit</Button>
@@ -522,7 +580,7 @@ export function PercentageGamePage() {
         {feedback && (
           <p
             className={cn(
-              "min-h-[24px] rounded-md px-3 py-1 text-center text-sm font-medium",
+              "min-h-[24px] rounded-md px-3 py-1 text-center font-medium text-sm",
               feedback.includes("Correct") && "bg-green-500/15 text-green-400",
               feedback.includes("Wrong") && "bg-red-500/15 text-red-400",
               feedback.includes("reset") && "bg-amber-500/15 text-amber-400",
@@ -538,7 +596,10 @@ export function PercentageGamePage() {
       </div>
 
       {/* Buttons */}
-      <div className="animate-fade-in-up flex flex-wrap justify-center gap-3" style={{ animationDelay: "400ms" }}>
+      <div
+        className="flex animate-fade-in-up flex-wrap justify-center gap-3"
+        style={{ animationDelay: "400ms" }}
+      >
         <Button onClick={() => setShowReport(true)}>📊 Report</Button>
         <Button variant="outline" onClick={handleReset}>
           ⚠️ Reset All Progress
@@ -549,40 +610,40 @@ export function PercentageGamePage() {
       {showReport && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-md rounded-xl border border-border/60 bg-card p-6 shadow-xl">
-            <h2 className="mb-4 text-lg font-bold">Report</h2>
+            <h2 className="mb-4 font-bold text-lg">Report</h2>
             <div className="mb-4 grid grid-cols-2 gap-3">
               <div className="rounded-lg bg-muted/30 p-3 text-center">
-                <small className="text-xs text-muted-foreground">
+                <small className="text-muted-foreground text-xs">
                   Final Score
                 </small>
-                <p className="text-xl font-bold text-blue-400">{score}</p>
+                <p className="font-bold text-blue-400 text-xl">{score}</p>
               </div>
               <div className="rounded-lg bg-muted/30 p-3 text-center">
-                <small className="text-xs text-muted-foreground">
+                <small className="text-muted-foreground text-xs">
                   Total Questions
                 </small>
-                <p className="text-xl font-bold">{total}</p>
+                <p className="font-bold text-xl">{total}</p>
               </div>
               <div className="rounded-lg bg-muted/30 p-3 text-center">
-                <small className="text-xs text-muted-foreground">
+                <small className="text-muted-foreground text-xs">
                   Correct Answers
                 </small>
-                <p className="text-xl font-bold text-green-500">
+                <p className="font-bold text-green-500 text-xl">
                   {correctCount}
                 </p>
               </div>
               <div className="rounded-lg bg-muted/30 p-3 text-center">
-                <small className="text-xs text-muted-foreground">
+                <small className="text-muted-foreground text-xs">
                   Accuracy
                 </small>
-                <p className="text-xl font-bold">
+                <p className="font-bold text-xl">
                   {total > 0
                     ? `${Math.round((correctCount / total) * 100)}%`
                     : "0%"}
                 </p>
               </div>
             </div>
-            <p className="mb-4 text-center text-xs text-muted-foreground">
+            <p className="mb-4 text-center text-muted-foreground text-xs">
               {new Date().toLocaleString()}
             </p>
             <div className="flex justify-center">

@@ -1,9 +1,13 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { Layout } from "@/shared/components/layout/layout"
-import { HomePage } from "@/features/home/index"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { BlogPage, BlogPostPage } from "@/features/blog/index"
-import { MathGamePage, PercentageGamePage, CoordGamePage } from "@/features/math-games/index"
+import { HomePage } from "@/features/home/index"
 import { HwListPage } from "@/features/hw-list/index"
+import {
+  CoordGamePage,
+  MathGamePage,
+  PercentageGamePage,
+} from "@/features/math-games/index"
+import { Layout } from "@/shared/components/layout/layout"
 
 export function App() {
   return (
@@ -14,7 +18,10 @@ export function App() {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:id" element={<BlogPostPage />} />
           <Route path="/math-game" element={<MathGamePage />} />
-          <Route path="/math-game/percentage-game" element={<PercentageGamePage />} />
+          <Route
+            path="/math-game/percentage-game"
+            element={<PercentageGamePage />}
+          />
           <Route path="/math-game/coord-game" element={<CoordGamePage />} />
           <Route path="/hw-list" element={<HwListPage />} />
         </Routes>

@@ -3,6 +3,7 @@ id: "writing-1"
 title: "熱心的路人，感謝你！"
 date: "2026-06-03"
 summary: "一篇來自期末考試的作文"
+cag: "作文"
 tags: [作文]
 ---
 

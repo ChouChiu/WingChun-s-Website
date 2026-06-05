@@ -5,6 +5,7 @@ export interface BlogPost {
   title: string
   date: string
   summary: string
+  cag: string
   tags: string[]
   content: string
 }
@@ -14,6 +15,7 @@ interface FrontMatter {
   title?: string
   date?: string
   summary?: string
+  cag?: string
   tags?: string[]
 }
 
@@ -48,6 +50,7 @@ async function loadAllPosts(): Promise<BlogPost[]> {
       title: data.title ?? filename,
       date: data.date ?? "",
       summary: data.summary ?? "",
+      cag: data.cag ?? "",
       tags: data.tags ?? [],
       content,
     })
