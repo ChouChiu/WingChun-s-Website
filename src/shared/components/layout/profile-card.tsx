@@ -47,16 +47,14 @@ export function ProfileCard() {
           現時項目
         </p>
         <p className="text-sm leading-relaxed">
-          正在建構{" "}
           <a
-            href="https://github.com/ChouChiu"
+            href="/blog/contributions"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary underline-offset-4 hover:underline"
           >
-            我的網站
-          </a>{" "}
-          及其他開源項目
+            點擊查看
+          </a>
         </p>
       </div>
 

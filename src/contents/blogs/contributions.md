@@ -1,7 +1,7 @@
 ---
 title: "我的貢獻"
 date: 2026-02-10
-summary: "展示我的 Github 貢獻"
+summary: "展示我的一些 Github 貢獻"
 cag: "技術"
 tags:
   - 技術
