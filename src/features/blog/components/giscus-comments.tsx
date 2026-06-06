@@ -12,9 +12,11 @@ const config = {
   mapping: "pathname" as const,
 }
 
+const THEME_VERSION = "2"
+
 function getThemeUrl(theme: "light" | "dark") {
   if (window.location.hostname === "localhost") return theme
-  return `${window.location.origin}/giscus-${theme}.css`
+  return `${window.location.origin}/giscus-${theme}.css?v=${THEME_VERSION}`
 }
 
 function isDarkMode() {
