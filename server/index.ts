@@ -1,7 +1,7 @@
 import { serve } from "@hono/node-server"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
-import { routes } from "./routes.js"
+import { routes } from "./features/github-contribution/routes.js"
 
 const app = new Hono()
 

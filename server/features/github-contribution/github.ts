@@ -1,33 +1,10 @@
-import {
+import { fetchGitHub } from "../../shared/utils/github.js"
+import type {
   ContributionData,
   GitHubContributor,
   GitHubRepo,
   GitHubStats,
 } from "./types.js"
-
-const GITHUB_API = "https://api.github.com"
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN || ""
-
-async function fetchGitHub<T>(endpoint: string): Promise<T> {
-  const headers: Record<string, string> = {
-    Accept: "application/vnd.github.v3+json",
-    "User-Agent": "GitHub-Contribution-API",
-  }
-
-  if (GITHUB_TOKEN) {
-    headers["Authorization"] = `Bearer ${GITHUB_TOKEN}`
-  }
-
-  const response = await fetch(`${GITHUB_API}${endpoint}`, { headers })
-
-  if (!response.ok) {
-    throw new Error(
-      `GitHub API error: ${response.status} ${response.statusText}`
-    )
-  }
-
-  return response.json() as Promise<T>
-}
 
 export async function getRepoInfo(
   owner: string,

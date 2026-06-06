@@ -1,4 +1,4 @@
-import { CachedData } from "./types.js"
+import type { CachedData } from "./types.js"
 
 const MEMORY_TTL = 60 * 60 * 1000 // 1 hour
 

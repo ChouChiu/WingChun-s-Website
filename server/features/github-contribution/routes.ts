@@ -4,7 +4,7 @@ import { getContributionData } from "./github.js"
 
 const GITHUB_USERNAME = "ChouChiu"
 
-const routes = new Hono()
+export const routes = new Hono()
 
 routes.get("/contributions/:owner/:repo", async (c) => {
   const owner = c.req.param("owner")
@@ -30,5 +30,3 @@ routes.get("/contributions/:owner/:repo", async (c) => {
     return c.json({ error: "Failed to fetch contribution data" }, 500)
   }
 })
-
-export { routes }
