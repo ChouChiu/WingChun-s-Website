@@ -26,9 +26,10 @@ Verification order: `bun run lint && bun run typecheck` before committing. `bun 
 ## Architecture
 
 - **Frontend**: React 19 + TypeScript 6 + Vite 8 + Tailwind CSS 4 + shadcn/ui
-- **Server**: Hono on Node (`server/`) — separate project with its own `package.json` and dependencies
-- **Homework crawler**: Python in `hw-list/` — runs daily via GitHub Actions, outputs to `public/hw-list/`
+- **Server**: Hono on Node (`server/`) — separate project with its own `package.json` and dependencies (uses TypeScript ~5.5, not 6)
+- **Homework crawler**: Python in `hw-list/` — runs daily via GitHub Actions, outputs to `public/hw-list/`. Requires `PORTAL_USERNAME` and `PORTAL_PASSWORD` secrets in GitHub
 - **Path alias**: `@/` maps to `./src/` (configured in `tsconfig.json` and `vite.config.ts`)
+- **MCP**: shadcn MCP server is configured in `opencode.json` — available for component lookups
 
 ### Source layout (`src/`)
 
@@ -55,7 +56,7 @@ Each feature follows the pattern: `components/`, `lib/`, `pages/`, `index.ts`.
 
 ## Conventions
 
-- **Biome** (not Prettier): no semicolons, double quotes, 80-width, trailing commas (es5), LF endings. Tailwind CSS class sorting via Biome's `useSortedClasses` nursery rule. Run `bun run format` (`biome check . --write`) before committing.
+- **Biome** (not Prettier): `recommended: false` — only explicitly configured rules are active. No semicolons, double quotes, 80-width, trailing commas (es5), LF endings. Tailwind CSS class sorting via Biome's `useSortedClasses` nursery rule. Run `bun run format` (`biome check . --write`) before committing.
 - **shadcn/ui config**: `components.json` uses `radix-vega` style, `stone` base color, CSS variables enabled. Components go in `src/components/ui/`.
 - **Blog posts**: Markdown files in `src/contents/blogs/` with YAML frontmatter (`title`, `date`, `summary`, `cag`, `tags`). The `id` field is optional — defaults to filename (without `.md`). Loaded at build time via `import.meta.glob`. Use `bun run blog` to scaffold a new post interactively.
 - **TypeScript strict mode** with `noUnusedLocals` and `noUnusedParameters` enabled. Build uses `tsc -b` (project references); typecheck uses `tsc --noEmit`. Biome additionally enforces `noExplicitAny` and `noUnusedVariables` at lint time.
