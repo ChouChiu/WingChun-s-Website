@@ -21,23 +21,27 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v5
         with:
-          python-version: '3.x'
+          path: ~/.bun/install/cache
+          key: bun-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-
 
       - name: Install dependencies
-        run: pip install -r hw-list/requirements.txt
+        run: bun install --frozen-lockfile
 
       - name: Run homework crawler
         env:
           PORTAL_USERNAME: ${{ secrets.PORTAL_USERNAME }}
           PORTAL_PASSWORD: ${{ secrets.PORTAL_PASSWORD }}
           FORCE_FULL_UPDATE: ${{ github.event.inputs.force_full_update || 'false' }}
-        run: python hw-list/homework_crawler.py
-        working-directory: ${{ github.workspace }}
+        run: bun run scripts/homework-crawler.ts
 
       - name: Commit and push if changed
         run: |
