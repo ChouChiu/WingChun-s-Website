@@ -1,0 +1,133 @@
+/*!
+ * Giscus Dark Theme — matches site's stone/warm palette
+ * Based on giscus custom_example.css (MIT License)
+ */
+
+main {
+  /* Syntax highlighting */
+  --color-prettylights-syntax-comment: #a8a29e;
+  --color-prettylights-syntax-constant: #fbbf24;
+  --color-prettylights-syntax-entity: #c4b5fd;
+  --color-prettylights-syntax-storage-modifier-import: #e7e5e4;
+  --color-prettylights-syntax-entity-tag: #86efac;
+  --color-prettylights-syntax-keyword: #fca5a5;
+  --color-prettylights-syntax-string: #93c5fd;
+  --color-prettylights-syntax-variable: #fdba74;
+  --color-prettylights-syntax-brackethighlighter-unmatched: #fca5a5;
+  --color-prettylights-syntax-invalid-illegal-text: #fafaf9;
+  --color-prettylights-syntax-invalid-illegal-bg: #7f1d1d;
+  --color-prettylights-syntax-carriage-return-text: #fafaf9;
+  --color-prettylights-syntax-carriage-return-bg: #991b1b;
+  --color-prettylights-syntax-string-regexp: #86efac;
+  --color-prettylights-syntax-markup-list: #fcd34d;
+  --color-prettylights-syntax-markup-heading: #d4a574;
+  --color-prettylights-syntax-markup-italic: #d6d3d1;
+  --color-prettylights-syntax-markup-bold: #d6d3d1;
+  --color-prettylights-syntax-markup-deleted-text: #fecaca;
+  --color-prettylights-syntax-markup-deleted-bg: #7f1d1d;
+  --color-prettylights-syntax-markup-inserted-text: #bbf7d0;
+  --color-prettylights-syntax-markup-inserted-bg: #14532d;
+  --color-prettylights-syntax-markup-changed-text: #fed7aa;
+  --color-prettylights-syntax-markup-changed-bg: #7c2d12;
+  --color-prettylights-syntax-markup-ignored-text: #d6d3d1;
+  --color-prettylights-syntax-markup-ignored-bg: #7a5a3a;
+  --color-prettylights-syntax-meta-diff-range: #c4b5fd;
+  --color-prettylights-syntax-brackethighlighter-angle: #a8a29e;
+  --color-prettylights-syntax-sublimelinter-gutter-mark: #57534e;
+  --color-prettylights-syntax-constant-other-reference-link: #93c5fd;
+
+  /* Buttons */
+  --color-btn-text: #d6d3d1;
+  --color-btn-bg: #292524;
+  --color-btn-border: rgba(255, 255, 255, 10%);
+  --color-btn-shadow: 0 0 transparent;
+  --color-btn-inset-shadow: 0 0 transparent;
+  --color-btn-hover-bg: #44403c;
+  --color-btn-hover-border: #78716c;
+  --color-btn-active-bg: #3a3633;
+  --color-btn-active-border: #57534e;
+  --color-btn-selected-bg: #1c1917;
+  --color-btn-primary-text: #fefcfb;
+  --color-btn-primary-bg: #7a5a3a;
+  --color-btn-primary-border: rgba(255, 255, 255, 10%);
+  --color-btn-primary-shadow: 0 0 transparent;
+  --color-btn-primary-inset-shadow: 0 0 transparent;
+  --color-btn-primary-hover-bg: #8b6b4a;
+  --color-btn-primary-hover-border: rgba(255, 255, 255, 10%);
+  --color-btn-primary-selected-bg: #7a5a3a;
+  --color-btn-primary-selected-shadow: 0 0 transparent;
+  --color-btn-primary-disabled-text: rgba(255, 255, 255, 50%);
+  --color-btn-primary-disabled-bg: rgba(122, 90, 58, 60%);
+  --color-btn-primary-disabled-border: rgba(255, 255, 255, 10%);
+
+  /* Canvas & foreground */
+  --color-canvas-default: #1c1917;
+  --color-canvas-overlay: #292524;
+  --color-canvas-inset: #0c0a09;
+  --color-canvas-subtle: #292524;
+  --color-fg-default: #fafaf9;
+  --color-fg-muted: #a8a29e;
+  --color-fg-subtle: #78716c;
+
+  /* Borders */
+  --color-border-default: rgba(255, 255, 255, 10%);
+  --color-border-muted: rgba(255, 255, 255, 6%);
+  --color-neutral-muted: rgba(120, 113, 108, 40%);
+
+  /* Accent */
+  --color-accent-fg: #d4a574;
+  --color-accent-emphasis: #7a5a3a;
+  --color-accent-muted: rgba(122, 90, 58, 40%);
+  --color-accent-subtle: rgba(122, 90, 58, 10%);
+
+  /* Semantic */
+  --color-success-fg: #4ade80;
+  --color-attention-fg: #facc15;
+  --color-attention-muted: rgba(250, 204, 21, 40%);
+  --color-attention-subtle: rgba(250, 204, 21, 15%);
+  --color-danger-fg: #f87171;
+  --color-danger-muted: rgba(248, 113, 113, 40%);
+  --color-danger-subtle: rgba(248, 113, 113, 10%);
+
+  /* Misc */
+  --color-action-list-item-default-hover-bg: rgba(168, 162, 158, 12%);
+  --color-segmented-control-bg: rgba(120, 113, 108, 10%);
+  --color-segmented-control-button-bg: #0c0a09;
+  --color-segmented-control-button-selected-border: #78716c;
+  --color-primer-shadow-inset: 0 0 transparent;
+  --color-scale-gray-7: #292524;
+  --color-scale-blue-8: #1e3a5f;
+
+  /* Reactions */
+  --color-social-reaction-bg-hover: #292524;
+  --color-social-reaction-bg-reacted-hover: #1e3a5f;
+}
+
+main .pagination-loader-container {
+  background-image: url("https://github.com/images/modules/pulls/progressive-disclosure-line-dark.svg");
+}
+
+main .gsc-loading-image {
+  background-image: url("https://github.githubassets.com/images/mona-loading-dark.gif");
+}
+
+/* Layout tweaks */
+main {
+  font-family:
+    "Noto Sans Variable", "Noto Sans", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+}
+
+.gsc-header {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border-muted);
+}
+
+.gsc-comment-box {
+  border-radius: 0.5rem;
+}
+
+.gsc-timeline .gsc-comment {
+  border-radius: 0.5rem;
+}

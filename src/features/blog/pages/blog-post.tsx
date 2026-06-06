@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { useBlogContext } from "@/shared/components/layout/blog-context"
 import { Button } from "@/shared/components/ui/button"
+import { GiscusComments } from "../components/giscus-comments"
 import { MarkdownRenderer } from "../components/markdown-renderer"
 import { type BlogPost, getPostById } from "../lib/blog"
 import { countWords } from "../lib/toc"
@@ -110,6 +111,13 @@ export function BlogPostPage() {
           <MarkdownRenderer content={post.content} />
         </div>
       </article>
+
+      <hr className="stagger-4 my-8 animate-fade-in-up" />
+
+      <section className="stagger-5 animate-fade-in-up">
+        <h2 className="mb-6 font-heading font-semibold text-xl">留言區</h2>
+        <GiscusComments />
+      </section>
     </div>
   )
 }
