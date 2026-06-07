@@ -1,4 +1,11 @@
-import { ArrowLeft, Calendar, FileText, FolderOpen, Tag } from "lucide-react"
+import {
+  ArrowLeft,
+  Calendar,
+  CreativeCommons,
+  FileText,
+  FolderOpen,
+  Tag,
+} from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { useBlogContext } from "@/shared/components/layout/blog-context"
@@ -111,6 +118,20 @@ export function BlogPostPage() {
           <MarkdownRenderer content={post.content} />
         </div>
       </article>
+
+      <p className="stagger-4 mt-4 flex animate-fade-in-up items-center gap-1.5 text-muted-foreground text-sm">
+        <CreativeCommons className="size-4" />
+        <span>本文採用</span>
+        <a
+          href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hant"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-foreground"
+        >
+          CC BY-NC-SA 4.0
+        </a>
+        <span>進行授權</span>
+      </p>
 
       <hr className="stagger-4 my-8 animate-fade-in-up" />
 
