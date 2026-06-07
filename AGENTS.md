@@ -27,7 +27,7 @@ Verification order: `bun run lint && bun run typecheck` before committing.
 
 - **Frontend**: Next.js 16 + App Router + React 19 + TypeScript 6 + Tailwind CSS 4 + shadcn/ui
 - **Server (Hono)**: Separate GitHub contribution API in `server/` — its own `package.json`, TypeScript ~5.5, runs on port 3001
-- **Homework crawler**: Python in `hw-list/` — runs daily via GitHub Actions, outputs to `public/hw-list/`. Requires `PORTAL_USERNAME` and `PORTAL_PASSWORD` secrets in GitHub
+- **Homework crawler**: Bun/TS script at `scripts/homework-crawler.ts` — runs daily via GitHub Actions, outputs to `public/hw-list/`. Requires `PORTAL_USERNAME` and `PORTAL_PASSWORD` secrets in GitHub
 - **Path alias**: `@/` maps to `./src/` (configured in `tsconfig.json`)
 - **MCP**: shadcn MCP server is configured in `opencode.json` — available for component lookups
 
@@ -69,8 +69,10 @@ Each feature follows the pattern: `components/`, `lib/`, `pages/`, `index.ts`.
 ## Conventions
 
 - **Biome** (not Prettier): `recommended: false` — only explicitly configured rules are active. No semicolons, double quotes, 80-width, trailing commas (es5), LF endings. Tailwind CSS class sorting via Biome's `useSortedClasses` nursery rule. Run `bun run format` (`biome check . --write`) before committing.
-- **shadcn/ui config**: `components.json` uses `radix-vega` style, `stone` base color, CSS variables enabled, `rsc: true`. Components go in `src/shared/components/ui/`.
+- **shadcn/ui config**: `components.json` uses `radix-vega` style, `stone` base color, CSS variables enabled, `rsc: true`. Components go in `src/shared/components/ui/`. Note: `components.json` aliases point to `@/components/ui` but the actual path is `src/shared/components/ui/` — after running `npx shadcn@latest add`, verify the file landed in the right place.
+- **shadcn imports**: Components in `src/shared/` use relative imports (e.g., `../../lib/utils`), not the `@/` alias. Follow this convention when editing existing shadcn components.
 - **Blog posts**: Markdown files in `src/contents/blogs/` with YAML frontmatter (`title`, `date`, `summary`, `cag`, `tags`). The `id` field is optional — defaults to filename (without `.md`). Loaded at build time via `fs` + `gray-matter` (cached in memory). Use `bun run blog` to scaffold a new post interactively.
+- **Scripts**: `scripts/create-blog.ts` (blog scaffold), `scripts/homework-crawler.ts` (daily crawler), `scripts/sync-stblog.sh` (blog sync).
 - **TypeScript strict mode** with `noUnusedLocals` and `noUnusedParameters` enabled. Biome additionally enforces `noExplicitAny` and `noUnusedVariables` at lint time.
 
 ## Server (Hono backend — separate service)
@@ -87,5 +89,5 @@ The `server/` directory is an independent Hono service for GitHub contribution d
 
 - **Frontend CI** (`.github/workflows/deploy.yml`): on push to `main`, runs `bun run build`, SCPs `.next/`, `public/`, `package.json`, `bun.lock`, `ecosystem.config.cjs`, `next.config.ts`, `src/contents/`, `src/app/globals.css`, `postcss.config.mjs`, `mdx-components.tsx` to VPS at `/var/www/wwchun.top`, installs production deps, restarts PM2
 - **PM2**: `ecosystem.config.cjs` runs `next start` on port 3000
-- **Homework crawler CI** (`.github/workflows/homework-crawler.yml`): daily cron, runs Python crawler, commits changes to `public/hw-list/` with `[skip ci]`
+- **Homework crawler CI** (`.github/workflows/homework-crawler.yml`): daily cron, runs Bun crawler, commits changes to `public/hw-list/` with `[skip ci]`
 - **Server deploy**: manual via `server/deploy.sh` or SCP + SSH (see `server/README.md`)
