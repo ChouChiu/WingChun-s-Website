@@ -4,12 +4,12 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "biome check .",
     "format": "biome check . --write",
     "typecheck": "tsc --noEmit",
-    "preview": "vite preview",
     "blog": "bun run scripts/create-blog.ts"
   },
   "dependencies": {
@@ -17,17 +17,21 @@
     "@fontsource-variable/noto-serif": "^5.2.9",
     "@giscus/react": "^3.1.0",
     "@iconify/react": "^6.0.2",
-    "@tailwindcss/vite": "^4",
+    "@mdx-js/loader": "^3.1.1",
+    "@next/mdx": "^16.2.7",
+    "@tailwindcss/postcss": "^4.3.0",
     "cheerio": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "gray-matter": "^4.0.3",
     "katex": "^0.17.0",
     "lucide-react": "^1.17.0",
+    "next": "^16.2.7",
+    "next-mdx-remote": "^6.0.0",
     "radix-ui": "^1.4.3",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "react-markdown": "^10.1.0",
-    "react-router-dom": "^7.16.0",
     "react-syntax-highlighter": "^16.1.1",
     "rehype-github-alerts": "^4.2.0",
     "rehype-katex": "^7.0.1",
@@ -48,9 +52,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-syntax-highlighter": "^15.5.13",
-    "@vitejs/plugin-react": "^6",
     "globals": "^17",
-    "typescript": "~6",
-    "vite": "^8"
+    "typescript": "~6"
   }
 }

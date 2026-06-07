@@ -1,3 +1,5 @@
+"use client"
+
 import {
   ArrowLeft,
   Calendar,
@@ -6,71 +8,34 @@ import {
   FolderOpen,
   Tag,
 } from "lucide-react"
-import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import dynamic from "next/dynamic"
+import Link from "next/link"
+import { useEffect } from "react"
 import { useBlogContext } from "@/shared/components/layout/blog-context"
 import { Button } from "@/shared/components/ui/button"
-import { GiscusComments } from "../components/giscus-comments"
 import { MarkdownRenderer } from "../components/markdown-renderer"
-import { type BlogPost, getPostById } from "../lib/blog"
+import type { BlogPost } from "../lib/blog"
 import { countWords } from "../lib/toc"
 
-export function BlogPostPage() {
-  const { id } = useParams()
-  const [post, setPost] = useState<BlogPost | null>(null)
-  const [loading, setLoading] = useState(true)
+const GiscusComments = dynamic(
+  () => import("../components/giscus-comments").then((m) => m.GiscusComments),
+  { ssr: false }
+)
+
+interface BlogPostPageProps {
+  post: BlogPost
+}
+
+export function BlogPostPage({ post }: BlogPostPageProps) {
   const { setTocContent, setTocLoading, tocCache } = useBlogContext()
 
   useEffect(() => {
-    if (!id) return
-    let cancelled = false
-
-    if (tocCache.has(id)) {
-      setTocContent(tocCache.get(id)!)
-      setTocLoading(false)
-    } else {
-      setTocLoading(true)
+    if (!tocCache.has(post.id)) {
+      tocCache.set(post.id, post.content)
     }
-
-    getPostById(id).then((p) => {
-      if (!cancelled) {
-        setPost(p ?? null)
-        setLoading(false)
-      }
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [id, setTocLoading, setTocContent, tocCache])
-
-  useEffect(() => {
-    if (post) {
-      if (!tocCache.has(post.id)) {
-        tocCache.set(post.id, post.content)
-      }
-      setTocContent(post.content)
-      setTocLoading(false)
-    }
+    setTocContent(post.content)
+    setTocLoading(false)
   }, [post, setTocContent, setTocLoading, tocCache])
-
-  if (loading) {
-    return (
-      <div className="text-center">
-        <p className="text-muted-foreground">載入中...</p>
-      </div>
-    )
-  }
-
-  if (!post) {
-    return (
-      <div className="text-center">
-        <h1 className="mb-4 font-bold text-2xl">找不到文章</h1>
-        <Button asChild>
-          <Link to="/blog">返回網誌</Link>
-        </Button>
-      </div>
-    )
-  }
 
   return (
     <div>
@@ -80,7 +45,7 @@ export function BlogPostPage() {
         asChild
         className="stagger-1 mb-4 animate-fade-in-up"
       >
-        <Link to="/blog">
+        <Link href="/blog">
           <ArrowLeft className="mr-1.5 size-4" />
           返回網誌
         </Link>
@@ -97,7 +62,7 @@ export function BlogPostPage() {
           </span>
           {post.cag && (
             <Link
-              to={`/blog?cag=${encodeURIComponent(post.cag)}`}
+              href={`/blog?cag=${encodeURIComponent(post.cag)}`}
               className="flex items-center gap-1 transition-colors hover:text-foreground"
             >
               <FolderOpen className="size-3.5" />

@@ -1,3 +1,5 @@
+"use client"
+
 import { Icon } from "@iconify/react"
 import { Check, Copy } from "lucide-react"
 import { useCallback, useMemo, useState } from "react"

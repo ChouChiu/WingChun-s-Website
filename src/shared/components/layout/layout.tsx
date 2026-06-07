@@ -1,14 +1,15 @@
-import { useLocation } from "react-router-dom"
+"use client"
+
+import { usePathname } from "next/navigation"
 import { BlogProvider } from "./blog-context"
 import { LeftSidebar } from "./left-sidebar"
 import { Navbar } from "./navbar"
 import { RightSidebar } from "./right-sidebar"
 
 function LayoutInner({ children }: { children: React.ReactNode }) {
-  const location = useLocation()
+  const pathname = usePathname()
 
-  const showRightSidebar =
-    location.pathname === "/" || location.pathname.startsWith("/blog")
+  const showRightSidebar = pathname === "/" || pathname.startsWith("/blog")
 
   return (
     <div className="min-h-screen">
@@ -33,7 +34,7 @@ function LayoutInner({ children }: { children: React.ReactNode }) {
         </main>
 
         {showRightSidebar && (
-          <RightSidebar isBlogPost={location.pathname.startsWith("/blog/")} />
+          <RightSidebar isBlogPost={pathname.startsWith("/blog/")} />
         )}
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { Grid3X3, Percent } from "lucide-react"
-import { Link } from "react-router-dom"
+import Link from "next/link"
 
 const mathGames = [
   {
@@ -26,7 +26,7 @@ export function MathGamePage() {
         {mathGames.map((game, idx) => (
           <Link
             key={game.href}
-            to={game.href}
+            href={game.href}
             className="group flex animate-fade-in-up items-start gap-4 rounded-lg border border-border/60 bg-muted/30 p-5 transition-all duration-200 hover:border-border hover:bg-muted/50"
             style={{ animationDelay: `${150 + idx * 80}ms` }}
           >

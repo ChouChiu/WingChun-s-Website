@@ -1,11 +1,21 @@
+"use client"
+
 import { Clock, FolderOpen, Tag } from "lucide-react"
+import Link from "next/link"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import { type BlogPost, getAllPosts } from "../../../features/blog/lib/blog"
 import { Badge } from "../ui/badge"
 import { Separator } from "../ui/separator"
 
-function CategoriesWidget({ posts }: { posts: BlogPost[] }) {
+interface BlogMeta {
+  id: string
+  title: string
+  date: string
+  summary: string
+  cag: string
+  tags: string[]
+}
+
+function CategoriesWidget({ posts }: { posts: BlogMeta[] }) {
   const cagCounts = new Map<string, number>()
   for (const post of posts) {
     if (post.cag) {
@@ -25,7 +35,7 @@ function CategoriesWidget({ posts }: { posts: BlogPost[] }) {
         {Array.from(cagCounts.entries()).map(([cag, count]) => (
           <Link
             key={cag}
-            to={`/blog?cag=${encodeURIComponent(cag)}`}
+            href={`/blog?cag=${encodeURIComponent(cag)}`}
             className="flex items-center justify-between rounded-md px-2 py-1.5 text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground"
           >
             <span>{cag}</span>
@@ -39,7 +49,7 @@ function CategoriesWidget({ posts }: { posts: BlogPost[] }) {
   )
 }
 
-function TagsWidget({ posts }: { posts: BlogPost[] }) {
+function TagsWidget({ posts }: { posts: BlogMeta[] }) {
   const tagSet = new Set<string>()
   for (const post of posts) {
     for (const tag of post.tags) {
@@ -58,7 +68,7 @@ function TagsWidget({ posts }: { posts: BlogPost[] }) {
       <div className="flex flex-wrap gap-1.5">
         {Array.from(tagSet).map((tag) => (
           <Badge key={tag} variant="outline" asChild>
-            <Link to={`/blog?tag=${encodeURIComponent(tag)}`}>{tag}</Link>
+            <Link href={`/blog?tag=${encodeURIComponent(tag)}`}>{tag}</Link>
           </Badge>
         ))}
       </div>
@@ -66,7 +76,7 @@ function TagsWidget({ posts }: { posts: BlogPost[] }) {
   )
 }
 
-function RecentPostsWidget({ posts }: { posts: BlogPost[] }) {
+function RecentPostsWidget({ posts }: { posts: BlogMeta[] }) {
   const recent = posts.slice(0, 5)
 
   if (recent.length === 0) return null
@@ -81,7 +91,7 @@ function RecentPostsWidget({ posts }: { posts: BlogPost[] }) {
         {recent.map((post) => (
           <Link
             key={post.id}
-            to={`/blog/${post.id}`}
+            href={`/blog/${post.id}`}
             className="group rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
           >
             <p className="text-muted-foreground text-sm leading-snug group-hover:text-foreground">
@@ -98,10 +108,15 @@ function RecentPostsWidget({ posts }: { posts: BlogPost[] }) {
 }
 
 export function SidebarWidgets() {
-  const [posts, setPosts] = useState<BlogPost[]>([])
+  const [posts, setPosts] = useState<BlogMeta[]>([])
 
   useEffect(() => {
-    getAllPosts().then(setPosts)
+    fetch("/api/blog")
+      .then((res) => res.json())
+      .then((data: BlogMeta[]) => setPosts(data))
+      .catch(() => {
+        /* ignore fetch errors */
+      })
   }, [])
 
   if (posts.length === 0) return null

@@ -1,3 +1,5 @@
+"use client"
+
 import { List } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { extractHeadings, type TocItem } from "../lib/toc"

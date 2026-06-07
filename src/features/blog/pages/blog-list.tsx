@@ -1,28 +1,26 @@
-import { Calendar, FolderOpen, Tag, X } from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
-import { Button } from "@/shared/components/ui/button"
-import { type BlogPost, getAllPosts } from "../lib/blog"
+"use client"
 
-export function BlogPage() {
-  const [posts, setPosts] = useState<BlogPost[]>([])
-  const [searchParams, setSearchParams] = useSearchParams()
+import { Calendar, FolderOpen, Tag, X } from "lucide-react"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import { useMemo } from "react"
+import { Button } from "@/shared/components/ui/button"
+import type { BlogPost } from "../lib/blog"
+
+interface BlogListProps {
+  posts: BlogPost[]
+}
+
+export function BlogList({ posts }: BlogListProps) {
+  const searchParams = useSearchParams()
   const activeCag = searchParams.get("cag")
   const activeTag = searchParams.get("tag")
-
-  useEffect(() => {
-    getAllPosts().then(setPosts)
-  }, [])
 
   const filtered = useMemo(() => {
     if (activeCag) return posts.filter((p) => p.cag === activeCag)
     if (activeTag) return posts.filter((p) => p.tags.includes(activeTag))
     return posts
   }, [posts, activeCag, activeTag])
-
-  const clearFilter = () => {
-    setSearchParams({})
-  }
 
   return (
     <div>
@@ -36,14 +34,15 @@ export function BlogPage() {
               <Tag className="size-3" />
             )}
             {activeCag ?? activeTag}
-            <Button
-              variant="ghost"
-              size="icon-xs"
-              onClick={clearFilter}
-              className="ml-0.5 size-4 rounded-full"
-            >
-              <X className="size-3" />
-            </Button>
+            <Link href="/blog">
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                className="ml-0.5 size-4 rounded-full"
+              >
+                <X className="size-3" />
+              </Button>
+            </Link>
           </span>
         )}
       </div>
@@ -60,7 +59,7 @@ export function BlogPage() {
           filtered.map((post, idx) => (
             <Link
               key={post.id}
-              to={`/blog/${post.id}`}
+              href={`/blog/${post.id}`}
               className="group animate-fade-in-up rounded-lg border border-border/60 bg-muted/30 p-5 transition-all duration-200 hover:border-border hover:bg-muted/50"
               style={{ animationDelay: `${150 + idx * 80}ms` }}
             >

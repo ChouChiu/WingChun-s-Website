@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 
 type Theme = "dark" | "light" | "system"
@@ -84,6 +86,7 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setThemeState] = React.useState<Theme>(() => {
+    if (typeof window === "undefined") return defaultTheme
     const storedTheme = localStorage.getItem(storageKey)
     if (isTheme(storedTheme)) {
       return storedTheme

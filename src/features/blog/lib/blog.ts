@@ -1,4 +1,6 @@
-import { parse } from "yaml"
+import fs from "fs"
+import matter from "gray-matter"
+import path from "path"
 
 export interface BlogPost {
   id: string
@@ -10,62 +12,38 @@ export interface BlogPost {
   content: string
 }
 
-interface FrontMatter {
-  id?: string
-  title?: string
-  date?: string
-  summary?: string
-  cag?: string
-  tags?: string[]
-}
-
-const rawFiles = import.meta.glob("../../../contents/blogs/*.md", {
-  query: "?raw",
-  import: "default",
-})
-
-function parseFrontMatter(raw: string): { data: FrontMatter; content: string } {
-  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/)
-  if (!match) return { data: {}, content: raw }
-  const data = parse(match[1]) as FrontMatter
-  const content = match[2].trim()
-  return { data, content }
-}
+const POSTS_DIR = path.join(process.cwd(), "src/contents/blogs")
 
 let cachedPosts: BlogPost[] | null = null
 
-async function loadAllPosts(): Promise<BlogPost[]> {
+export function getAllPosts(): BlogPost[] {
   if (cachedPosts) return cachedPosts
 
-  const posts: BlogPost[] = []
+  const files = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".md"))
 
-  for (const [path, loader] of Object.entries(rawFiles)) {
-    const raw = (await loader()) as string
-    const { data, content } = parseFrontMatter(raw)
+  cachedPosts = files
+    .map((filename) => {
+      const raw = fs.readFileSync(path.join(POSTS_DIR, filename), "utf8")
+      const { data, content } = matter(raw)
 
-    const filename = path.split("/").pop()!.replace(/\.md$/, "")
-
-    posts.push({
-      id: data.id ?? filename,
-      title: data.title ?? filename,
-      date: data.date ?? "",
-      summary: data.summary ?? "",
-      cag: data.cag ?? "",
-      tags: data.tags ?? [],
-      content,
+      return {
+        id: data.id || filename.replace(".md", ""),
+        title: data.title || filename,
+        date:
+          data.date instanceof Date
+            ? data.date.toISOString().split("T")[0]
+            : String(data.date || ""),
+        summary: data.summary || "",
+        cag: data.cag || "",
+        tags: data.tags || [],
+        content,
+      }
     })
-  }
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
-  posts.sort((a, b) => (b.date > a.date ? 1 : -1))
-  cachedPosts = posts
-  return posts
+  return cachedPosts
 }
 
-export async function getAllPosts(): Promise<BlogPost[]> {
-  return loadAllPosts()
-}
-
-export async function getPostById(id: string): Promise<BlogPost | undefined> {
-  const posts = await loadAllPosts()
-  return posts.find((p) => p.id === id)
+export function getPostById(id: string): BlogPost | undefined {
+  return getAllPosts().find((post) => post.id === id)
 }

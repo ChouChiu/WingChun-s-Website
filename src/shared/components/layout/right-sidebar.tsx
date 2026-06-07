@@ -1,4 +1,6 @@
-import { useLocation } from "react-router-dom"
+"use client"
+
+import { usePathname } from "next/navigation"
 import { TableOfContents } from "../../../features/blog/components/table-of-contents"
 import { useBlogContext } from "./blog-context"
 import { SidebarWidgets } from "./sidebar-widgets"
@@ -23,7 +25,7 @@ function TocSkeleton() {
 
 export function RightSidebar({ isBlogPost }: RightSidebarProps) {
   const { tocContent, tocLoading } = useBlogContext()
-  const location = useLocation()
+  const pathname = usePathname()
 
   return (
     <aside
@@ -34,17 +36,11 @@ export function RightSidebar({ isBlogPost }: RightSidebarProps) {
         {isBlogPost && tocLoading ? (
           <TocSkeleton />
         ) : isBlogPost && tocContent ? (
-          <div
-            key={`toc-${location.pathname}`}
-            className="animate-content-switch"
-          >
+          <div key={`toc-${pathname}`} className="animate-content-switch">
             <TableOfContents content={tocContent} />
           </div>
         ) : (
-          <div
-            key={`widgets-${location.pathname}`}
-            className="animate-content-switch"
-          >
+          <div key={`widgets-${pathname}`} className="animate-content-switch">
             <SidebarWidgets />
           </div>
         )}

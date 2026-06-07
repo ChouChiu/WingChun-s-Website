@@ -1,14 +1,9 @@
 import { Calendar, Tag } from "lucide-react"
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import { type BlogPost, getAllPosts } from "@/features/blog/lib/blog"
+import Link from "next/link"
+import { getAllPosts } from "@/features/blog/lib/blog"
 
 export function HomePage() {
-  const [posts, setPosts] = useState<BlogPost[]>([])
-
-  useEffect(() => {
-    getAllPosts().then(setPosts)
-  }, [])
+  const posts = getAllPosts()
 
   return (
     <div>
@@ -22,7 +17,7 @@ export function HomePage() {
           posts.map((post, idx) => (
             <Link
               key={post.id}
-              to={`/blog/${post.id}`}
+              href={`/blog/${post.id}`}
               className="group animate-fade-in-up rounded-lg border border-border/60 bg-muted/30 p-5 transition-all duration-200 hover:border-border hover:bg-muted/50"
               style={{ animationDelay: `${150 + idx * 80}ms` }}
             >

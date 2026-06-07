@@ -1,3 +1,5 @@
+"use client"
+
 import {
   BookOpen,
   Calculator,
@@ -6,8 +8,9 @@ import {
   Menu,
   X,
 } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
-import { Link, useLocation } from "react-router-dom"
 import { cn } from "../../lib/utils"
 import { GithubIcon } from "../icons/github-icon"
 import { Button } from "../ui/button"
@@ -21,12 +24,12 @@ const navLinks = [
 ]
 
 export function Navbar() {
-  const location = useLocation()
+  const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const isActive = (href: string) => {
-    if (href === "/") return location.pathname === "/"
-    return location.pathname.startsWith(href)
+    if (href === "/") return pathname === "/"
+    return pathname.startsWith(href)
   }
 
   return (
@@ -39,7 +42,7 @@ export function Navbar() {
       >
         <div className="mx-auto flex max-w-[1440px] items-center px-4 py-3 lg:px-6">
           <Link
-            to="/"
+            href="/"
             className="shrink-0 font-bold font-heading text-lg tracking-tight"
           >
             ChouChiu
@@ -73,7 +76,7 @@ export function Navbar() {
                     "after:absolute after:-bottom-3 after:left-1/2 after:h-[3px] after:w-4 after:-translate-x-1/2 after:rounded-full after:bg-primary"
                 )}
               >
-                <Link to={link.href}>
+                <Link href={link.href}>
                   <link.icon className="mr-1.5 size-4" />
                   {link.label}
                 </Link>
@@ -114,7 +117,7 @@ export function Navbar() {
                 className="justify-start"
                 onClick={() => setMobileOpen(false)}
               >
-                <Link to={link.href}>
+                <Link href={link.href}>
                   <link.icon className="mr-2 size-4" />
                   {link.label}
                 </Link>

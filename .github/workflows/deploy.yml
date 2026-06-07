@@ -43,16 +43,17 @@ jobs:
           host: 66.154.101.126
           username: root
           key: ${{ secrets.VPS_SSH_KEY }}
-          source: "dist/*"
+          source: ".next,public,package.json,bun.lock,ecosystem.config.cjs,next.config.ts,src/contents,src/app/globals.css,postcss.config.mjs,mdx-components.tsx"
           target: "/var/www/wwchun.top"
-          strip_components: 1
 
-      - name: Reload Nginx
+      - name: Install dependencies and restart on VPS
         uses: appleboy/ssh-action@v1.2.5
         with:
           host: 66.154.101.126
           username: root
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            nginx -t && systemctl reload nginx
+            cd /var/www/wwchun.top
+            bun install --production
+            pm2 restart wwchun-top || pm2 start ecosystem.config.cjs
             echo "Deployed successfully at $(date)"

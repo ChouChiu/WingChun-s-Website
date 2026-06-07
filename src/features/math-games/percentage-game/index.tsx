@@ -1,6 +1,8 @@
+"use client"
+
 import { ArrowLeft } from "lucide-react"
+import Link from "next/link"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { Link } from "react-router-dom"
 import { Button } from "@/shared/components/ui/button"
 import { cn } from "@/shared/lib/utils"
 import { CalculatorWidget } from "../components/calculator"
@@ -522,7 +524,7 @@ export function PercentageGamePage() {
         asChild
         className="stagger-1 mb-3 animate-fade-in-up"
       >
-        <Link to="/math-game">
+        <Link href="/math-game">
           <ArrowLeft className="mr-1.5 size-4" />
           Back to Math Games
         </Link>

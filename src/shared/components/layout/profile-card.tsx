@@ -1,3 +1,5 @@
+"use client"
+
 import { Copy, ExternalLink, Mail, Send } from "lucide-react"
 import { useState } from "react"
 import { GithubIcon } from "../icons/github-icon"

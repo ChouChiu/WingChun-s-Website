@@ -1,3 +1,5 @@
+"use client"
+
 import { Calculator as CalcIcon, X } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Button } from "@/shared/components/ui/button"
