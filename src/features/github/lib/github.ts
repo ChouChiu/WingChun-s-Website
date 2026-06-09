@@ -2,16 +2,34 @@ import type { ContributionData } from "../types/github"
 
 const API_BASE = "/api/github"
 const CACHE_KEY_PREFIX = "github-contribution-"
+const CACHE_VERSION_KEY = "github-contribution-version"
+const CACHE_VERSION = 2
 const CACHE_TTL = 60 * 60 * 1000 // 1 hour
 
 interface CachedData {
   data: ContributionData
   timestamp: number
+  version: number
+}
+
+function clearOldCache() {
+  const storedVersion = localStorage.getItem(CACHE_VERSION_KEY)
+  if (storedVersion !== String(CACHE_VERSION)) {
+    const keys = Object.keys(localStorage)
+    for (const key of keys) {
+      if (key.startsWith(CACHE_KEY_PREFIX)) {
+        localStorage.removeItem(key)
+      }
+    }
+    localStorage.setItem(CACHE_VERSION_KEY, String(CACHE_VERSION))
+  }
 }
 
 export async function fetchContributionData(
   repo: string
 ): Promise<ContributionData> {
+  clearOldCache()
+
   const cacheKey = `${CACHE_KEY_PREFIX}${repo}`
 
   // Check cache
@@ -19,7 +37,10 @@ export async function fetchContributionData(
   if (cached) {
     try {
       const parsed: CachedData = JSON.parse(cached)
-      if (Date.now() - parsed.timestamp < CACHE_TTL) {
+      if (
+        parsed.version === CACHE_VERSION &&
+        Date.now() - parsed.timestamp < CACHE_TTL
+      ) {
         return parsed.data
       }
     } catch {
@@ -47,6 +68,7 @@ export async function fetchContributionData(
     JSON.stringify({
       data,
       timestamp: Date.now(),
+      version: CACHE_VERSION,
     })
   )
 
