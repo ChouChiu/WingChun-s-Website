@@ -147,7 +147,7 @@ export function GitHubContributionCard({
         </div>
         <div className="min-w-0 flex-1">
           <a
-            href={data.repoUrl}
+            href={data.repoUrl ?? "#"}
             target="_blank"
             rel="noopener noreferrer"
             className="line-clamp-1 font-semibold text-base text-foreground transition-colors hover:text-primary"
@@ -159,7 +159,7 @@ export function GitHubContributionCard({
               <Star className="size-3.5 fill-yellow-500 text-yellow-500" />
               {formatNumber(data.stars)}
             </span>
-            {data.contributions.lastContributionDate && (
+            {data.contributions?.lastContributionDate && (
               <span className="flex items-center gap-1">
                 <GitCommit className="size-3.5" />
                 My last: {data.contributions.lastContributionDate}
@@ -178,7 +178,7 @@ export function GitHubContributionCard({
       <div className="mt-4 grid grid-cols-2 gap-3">
         {/* Issues */}
         <a
-          href={data.links.issues}
+          href={data.links?.issues ?? "#"}
           target="_blank"
           rel="noopener noreferrer"
           className="group/stat flex flex-col items-center justify-center rounded-lg border border-border/40 bg-background/60 p-3 transition-all hover:border-violet-500/40 hover:bg-violet-500/5"
@@ -187,7 +187,7 @@ export function GitHubContributionCard({
           <div className="flex items-center gap-1.5">
             <CircleDot className="size-4 text-violet-500 transition-transform group-hover/stat:scale-110" />
             <span className="font-bold text-foreground text-xl group-hover/stat:text-violet-600 dark:group-hover/stat:text-violet-400">
-              {data.contributions.issues}
+              {data.contributions?.issues ?? 0}
             </span>
           </div>
           <span className="mt-1 text-muted-foreground text-xs">Issues</span>
@@ -195,7 +195,7 @@ export function GitHubContributionCard({
 
         {/* PRs */}
         <a
-          href={data.links.pullRequests}
+          href={data.links?.pullRequests ?? "#"}
           target="_blank"
           rel="noopener noreferrer"
           className="group/stat flex flex-col items-center justify-center rounded-lg border border-border/40 bg-background/60 p-3 transition-all hover:border-blue-500/40 hover:bg-blue-500/5"
@@ -204,7 +204,7 @@ export function GitHubContributionCard({
           <div className="flex items-center gap-1.5">
             <GitPullRequest className="size-4 text-blue-500 transition-transform group-hover/stat:scale-110" />
             <span className="font-bold text-foreground text-xl group-hover/stat:text-blue-600 dark:group-hover/stat:text-blue-400">
-              {data.contributions.pullRequests}
+              {data.contributions?.pullRequests ?? 0}
             </span>
           </div>
           <span className="mt-1 text-muted-foreground text-xs">PRs</span>
@@ -215,7 +215,7 @@ export function GitHubContributionCard({
           <div className="flex items-center gap-1.5">
             <Plus className="size-4 text-green-500" />
             <span className="font-bold text-green-600 text-xl dark:text-green-400">
-              {formatNumber(data.contributions.additions)}
+              {formatNumber(data.contributions?.additions ?? 0)}
             </span>
           </div>
           <span className="mt-1 text-muted-foreground text-xs">Additions</span>
@@ -226,7 +226,7 @@ export function GitHubContributionCard({
           <div className="flex items-center gap-1.5">
             <Minus className="size-4 text-red-500" />
             <span className="font-bold text-red-600 text-xl dark:text-red-400">
-              {formatNumber(data.contributions.deletions)}
+              {formatNumber(data.contributions?.deletions ?? 0)}
             </span>
           </div>
           <span className="mt-1 text-muted-foreground text-xs">Deletions</span>
