@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/shared/components/layout/theme-provider"
 import "./globals.css"
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://wwchun.top"),
   title: "ChouChiu 的網站",
   description: "歡迎來到 ChouChiu 的網站",
   icons: {
