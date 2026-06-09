@@ -14,7 +14,7 @@ const config = {
   mapping: "pathname" as const,
 }
 
-const THEME_VERSION = "2"
+const THEME_VERSION = "3"
 
 function getThemeUrl(theme: "light" | "dark") {
   if (window.location.hostname === "localhost") return theme
