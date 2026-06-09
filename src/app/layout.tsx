@@ -6,6 +6,9 @@ import "./globals.css"
 export const metadata: Metadata = {
   title: "ChouChiu 的網站",
   description: "歡迎來到 ChouChiu 的網站",
+  icons: {
+    icon: "/avatar.png",
+  },
   openGraph: {
     title: "ChouChiu 的網站",
     description: "歡迎來到 ChouChiu 的網站",
@@ -13,6 +16,7 @@ export const metadata: Metadata = {
     siteName: "ChouChiu 的網站",
     locale: "zh_TW",
     type: "website",
+    images: ["/avatar.png"],
   },
 }
 
@@ -33,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="zh-CN" suppressHydrationWarning>
+    <html lang="zh-CN" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

@@ -3,7 +3,7 @@
 import { Copy, ExternalLink, Mail, Send } from "lucide-react"
 import { useState } from "react"
 import { GithubIcon } from "../icons/github-icon"
-import { Avatar, AvatarFallback } from "../ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Button } from "../ui/button"
 import { Separator } from "../ui/separator"
 
@@ -24,7 +24,15 @@ export function ProfileCard() {
     <div className="flex flex-col items-start gap-4 rounded-2xl border border-border/60 bg-card/50 p-5 shadow-sm">
       {/* Avatar & Info */}
       <div className="flex items-center gap-3">
-        <Avatar size="lg">
+        <Avatar
+          size="lg"
+          className="size-24 rounded-lg after:rounded-lg after:border-0"
+        >
+          <AvatarImage
+            src="/avatar.png"
+            alt="ChouChiu"
+            className="rounded-lg"
+          />
           <AvatarFallback>CC</AvatarFallback>
         </Avatar>
         <div>
