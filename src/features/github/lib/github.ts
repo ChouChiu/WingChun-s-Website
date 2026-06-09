@@ -36,6 +36,11 @@ export async function fetchContributionData(
 
   const data = await response.json()
 
+  // Check if response contains an error
+  if (data.error) {
+    throw new Error(data.error)
+  }
+
   // Save to cache
   localStorage.setItem(
     cacheKey,
