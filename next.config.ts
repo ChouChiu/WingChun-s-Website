@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/giscus-:path*.css",
+        source: "/giscus-:path(.*\\.css)",
         headers: [
           {
             key: "Access-Control-Allow-Origin",
