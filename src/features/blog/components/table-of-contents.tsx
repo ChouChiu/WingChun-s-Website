@@ -1,20 +1,22 @@
 "use client"
 
 import { List } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
-import { extractHeadings, type TocItem } from "../lib/toc"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { extractHeadings } from "../lib/toc"
 
 interface TableOfContentsProps {
   content: string
 }
 
 export function TableOfContents({ content }: TableOfContentsProps) {
-  const [headings] = useState<TocItem[]>(() => extractHeadings(content))
+  const headings = useMemo(() => extractHeadings(content), [content])
   const [activeId, setActiveId] = useState<string>("")
   const listRef = useRef<HTMLUListElement>(null)
   const indicatorRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    setActiveId("")
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {

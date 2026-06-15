@@ -79,7 +79,7 @@ export function BlogPostPage({ post }: BlogPostPageProps) {
           </span>
         </div>
 
-        <div className="markdown-body stagger-4 mt-6 animate-fade-in-up">
+        <div className="stagger-4 mt-6 animate-fade-in-up">
           <MarkdownRenderer content={post.content} />
         </div>
       </article>
