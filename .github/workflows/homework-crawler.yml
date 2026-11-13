@@ -2,7 +2,8 @@ name: Homework Crawler
 
 on:
   schedule:
-    - cron: '0 14 * * *'
+    # Daily at 17:00 Hong Kong time (UTC+8).
+    - cron: '0 9 * * *'
   workflow_dispatch:
     inputs:
       force_full_update:
